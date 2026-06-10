@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FlashNotch — Anki in your MacBook notch</title>
+<meta name="description" content="A glanceable due count lives in your MacBook notch. Hover, flip, grade — without leaving what you're doing. Anki stays the scheduler.">
+<meta property="og:title" content="FlashNotch — Anki in your MacBook notch">
+<meta property="og:description" content="Review your Anki cards from the MacBook notch. Hover to expand, grade with the keyboard, close. Your schedule stays in Anki.">
+<meta property="og:type" content="website">
+<style>
+/* ── DESIGN TOKENS ─────────────────────────────────────────────────────── */
+:root {
+  --accent:    #0a84ff;
+  --green:     #32d74b;
+  --orange:    #ff9f0a;
+  --again-bg:  rgba(255,69,58,0.55);
+
+  --text-primary: rgba(255,255,255,0.85);
+  --text-70:      rgba(255,255,255,0.7);
+  --text-60:      rgba(255,255,255,0.6);
+  --text-55:      rgba(255,255,255,0.55);
+
+  --fill-subtle:  rgba(255,255,255,0.08);
+  --fill-medium:  rgba(255,255,255,0.12);
+  --fill-strong:  rgba(255,255,255,0.14);
+
+  --font-system:  -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif;
+  --font-rounded: ui-rounded, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  --radius-btn:   8px;
+}
+
+/* ── RESET ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html  { background: #000; }
+body  {
+  background: #000;
+  color: var(--text-primary);
+  font-family: var(--font-system);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 32px; }
+
+/* ── NAV ───────────────────────────────────────────────────────────────── */
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 0;
+}
+.wordmark {
+  font-size: 15px; font-weight: 600; letter-spacing: -0.01em;
+  color: #fff; text-decoration: none;
+}
+.nav-links { display: flex; align-items: center; gap: 26px; }
+.nav-links a {
+  font-size: 13px; color: var(--text-70); text-decoration: none;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: #fff; }
+.nav-cta {
+  font-size: 13px; font-weight: 600; color: #fff; text-decoration: none;
+  background: var(--accent); padding: 5px 14px;
+  border-radius: var(--radius-btn); transition: opacity 0.15s;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+/* ── HERO ──────────────────────────────────────────────────────────────── */
+.hero { text-align: center; padding: 40px 0 26px; }
+
+h1 {
+  font-size: 54px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.08;
+  margin: 26px 0 0; color: #fff;
+}
+.sub {
+  font-size: 17px; line-height: 1.55; color: var(--text-70);
+  max-width: 560px; margin: 18px auto 0;
+}
+.cta-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; margin-top: 28px;
+}
+.mas-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  text-decoration: none; background: #fff; color: #000;
+  font-size: 15px; font-weight: 600; padding: 11px 22px;
+  border-radius: 10px; transition: opacity 0.15s;
+}
+.mas-btn:hover { opacity: 0.9; }
+.mas-btn .apple { font-size: 18px; line-height: 1; }
+.cta-meta { font-size: 12px; color: var(--text-55); margin-top: 14px; }
+
+.demo-shell {
+  margin-top: 44px; background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; overflow: hidden; padding-bottom: 14px;
+}
+
+/* ── SECTION COMMON ────────────────────────────────────────────────────── */
+section { padding: 72px 0 0; }
+.kicker {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text-55);
+}
+h2 {
+  font-size: 30px; font-weight: 600; letter-spacing: -0.02em;
+  margin: 10px 0 0; color: #fff;
+}
+.lede {
+  font-size: 15px; line-height: 1.6; color: var(--text-70);
+  max-width: 600px; margin: 14px 0 0;
+}
+
+/* ── HOW IT WORKS ──────────────────────────────────────────────────────── */
+.steps {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 14px; margin-top: 32px;
+}
+.step { background: var(--fill-subtle); border-radius: 12px; padding: 22px 20px; }
+.step .n {
+  font-family: var(--font-rounded); font-weight: 600;
+  font-size: 12px; color: var(--text-55);
+}
+.step h3 { font-size: 15px; font-weight: 600; margin: 8px 0 6px; color: var(--text-primary); }
+.step p  { font-size: 13px; line-height: 1.55; color: var(--text-70); }
+
+/* ── TRUST ─────────────────────────────────────────────────────────────── */
+.trust {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 40px; margin-top: 32px; align-items: start;
+}
+.trust ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.trust li {
+  font-size: 14px; line-height: 1.5; color: var(--text-70);
+  padding-left: 22px; position: relative;
+}
+.trust li::before {
+  content: "✓"; position: absolute; left: 0;
+  color: var(--green); font-weight: 600;
+}
+.quote {
+  background: var(--fill-subtle); border-radius: 12px; padding: 24px;
+  font-size: 17px; line-height: 1.5; color: var(--text-primary);
+  font-weight: 600; letter-spacing: -0.01em;
+}
+.quote small {
+  display: block; margin-top: 10px;
+  font-size: 12px; font-weight: 400; color: var(--text-55);
+}
+
+/* ── SHORTCUTS ─────────────────────────────────────────────────────────── */
+.keys { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.key  { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.keycap {
+  min-width: 44px; padding: 10px 14px; text-align: center;
+  background: var(--fill-medium); border-radius: var(--radius-btn);
+  border-bottom: 2px solid rgba(255,255,255,0.18);
+  font-size: 14px; font-weight: 600; color: var(--text-primary);
+  font-family: var(--font-rounded);
+}
+.key span { font-size: 11px; color: var(--text-60); }
+
+/* ── FEATURES ──────────────────────────────────────────────────────────── */
+.features {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 14px; margin-top: 32px;
+}
+.feature { background: var(--fill-subtle); border-radius: 12px; padding: 20px; }
+.feature h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--text-primary); }
+.feature p  { font-size: 13px; line-height: 1.5; color: var(--text-70); }
+
+/* ── PRICING ───────────────────────────────────────────────────────────── */
+.price-card {
+  margin-top: 32px; background: var(--fill-subtle);
+  border-radius: 16px; padding: 36px; text-align: center;
+}
+.price {
+  font-family: var(--font-rounded); font-size: 44px; font-weight: 600;
+  color: #fff; font-variant-numeric: tabular-nums;
+}
+.price-sub  { font-size: 14px; color: var(--text-70); margin-top: 6px; }
+.price-note { font-size: 12px; color: var(--text-55); margin-top: 18px; }
+
+/* ── FAQ ───────────────────────────────────────────────────────────────── */
+.faq { margin-top: 28px; display: flex; flex-direction: column; }
+.faq details {
+  border-top: 1px solid rgba(255,255,255,0.08); padding: 16px 0;
+}
+.faq details:last-child { border-bottom: 1px solid rgba(255,255,255,0.08); }
+.faq summary {
+  font-size: 14px; font-weight: 600; color: var(--text-primary);
+  cursor: pointer; list-style: none;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+"; color: var(--text-55);
+  font-family: var(--font-rounded); flex-shrink: 0; margin-left: 16px;
+}
+.faq details[open] summary::after { content: "−"; }
+.faq p {
+  font-size: 13px; line-height: 1.6; color: var(--text-70);
+  margin-top: 10px; max-width: 640px;
+}
+
+/* ── FOOTER ────────────────────────────────────────────────────────────── */
+footer {
+  margin-top: 80px; border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 28px 0 40px;
+}
+.foot {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12px; color: var(--text-55);
+}
+.foot-links { display: flex; gap: 20px; align-items: center; }
+.foot a { color: var(--text-55); text-decoration: none; }
+.foot a:hover { color: var(--text-70); }
+
+/* ── INTERACTIVE DEMO ──────────────────────────────────────────────────── */
+#demo-container {
+  position: relative; height: 380px; user-select: none;
+}
+
+/* menu bar */
+#demo-menubar {
+  height: 32px; background: #000;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; font-size: 13px; color: rgba(255,255,255,0.85);
+  border-radius: 10px 10px 0 0;
+}
+#demo-menubar .ml { display: flex; gap: 18px; }
+#demo-menubar .ml span:first-child { font-weight: 600; }
+#demo-menubar .mr { font-variant-numeric: tabular-nums; color: rgba(255,255,255,0.7); }
+
+/* desktop bg */
+#demo-desktop {
+  position: absolute; top: 32px; left: 0; right: 0; bottom: 24px;
+  background: #111;
+}
+
+/* notch pill */
+#demo-pill {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  height: 37px; min-width: 190px; background: #000;
+  border-radius: 0 0 11px 11px;
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 10px; cursor: pointer; z-index: 10;
+}
+.pill-inner {
+  display: flex; align-items: center; gap: 5px;
+  font-family: var(--font-rounded); font-size: 12px; font-weight: 600;
+  font-variant-numeric: tabular-nums; color: #fff;
+}
+.pill-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--orange);
+  flex-shrink: 0;
+}
+.pill-dot.ok { background: var(--green); }
+
+/* panel */
+#demo-panel {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 400px; background: #000;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.75);
+  display: none; flex-direction: column; z-index: 11;
+}
+#demo-panel.open { display: flex; }
+
+.demo-notch-gap { height: 30px; flex: none; background: #000; }
+
+.demo-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 5px 14px; flex: none;
+}
+.demo-header-title { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+.demo-header-right { display: flex; align-items: center; gap: 8px; }
+.demo-badge { font-size: 10px; color: var(--text-60); font-variant-numeric: tabular-nums; }
+.demo-anki-btn {
+  font-size: 12px; color: rgba(255,255,255,0.75);
+  background: none; border: none; cursor: pointer; padding: 0;
+  font-family: var(--font-system);
+}
+
+.demo-card {
+  flex: 1; padding: 14px 16px; font-size: 17px; line-height: 1.5;
+  color: rgba(255,255,255,0.9);
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; min-height: 110px;
+}
+.demo-card .cloze { color: lightblue; font-weight: 600; }
+
+.demo-footer { padding: 6px 10px; flex: none; }
+.demo-show-btn {
+  width: 100%; padding: 6px 12px; border-radius: var(--radius-btn);
+  background: var(--fill-strong); border: none; cursor: pointer;
+  font-family: var(--font-system); font-size: 13px; font-weight: 600;
+  color: var(--text-primary);
+  display: flex; align-items: center; justify-content: space-between;
+  transition: opacity 0.1s;
+}
+.demo-show-btn:hover { opacity: 0.85; }
+.demo-show-hint { font-size: 11px; color: var(--text-60); }
+
+.demo-grade-bar { display: flex; gap: 6px; padding: 6px 10px; flex: none; }
+.demo-grade-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  gap: 3px; padding: 5px 0; border-radius: var(--radius-btn);
+  background: var(--fill-medium); border: none; cursor: pointer;
+  font-family: var(--font-system); color: var(--text-primary);
+  transition: opacity 0.1s;
+}
+.demo-grade-btn:hover { opacity: 0.8; }
+.demo-grade-btn.again { background: var(--again-bg); }
+.demo-grade-label { font-size: 13px; font-weight: 600; }
+.demo-grade-ivl   { font-size: 11px; color: var(--text-60); }
+
+.demo-status {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 8px; padding: 20px;
+}
+.demo-status-text   { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+.demo-status-detail { font-size: 13px; color: var(--text-60); }
+.demo-reset-btn {
+  font-size: 12px; color: var(--text-60); background: none; border: none;
+  cursor: pointer; padding: 0; font-family: var(--font-system);
+  transition: color 0.1s;
+}
+.demo-reset-btn:hover { color: var(--text-70); }
+
+#demo-hint {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  text-align: center; font-size: 12px; color: var(--text-55);
+}
+
+/* ── RESPONSIVE ────────────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  h1 { font-size: 38px; }
+  .steps, .features { grid-template-columns: 1fr; }
+  .trust { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .wrap { padding: 0 20px; }
+  #demo-panel { width: min(340px, 90vw); }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav>
+    <a class="wordmark" href="/">FlashNotch</a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#keys">Shortcuts</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a class="nav-cta" href="#pricing">Get the app</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <h1>Your Anki reps,<br>in the notch.</h1>
+    <p class="sub">A glanceable due count lives in your MacBook notch. Hover, flip, grade — without leaving what you're doing. Anki stays the scheduler.</p>
+    <div class="cta-row">
+      <a class="mas-btn" href="#pricing">
+        <span class="apple">&#xF8FF;</span>
+        Download on the Mac App Store
+      </a>
+    </div>
+    <p class="cta-meta">macOS 15+ · requires Anki with AnkiConnect · review-only</p>
+
+    <div class="demo-shell">
+      <div id="demo-container">
+        <div id="demo-menubar">
+          <div class="ml">
+            <span>Finder</span><span>File</span><span>Edit</span><span>View</span>
+          </div>
+          <div class="mr">9:41 AM</div>
+        </div>
+        <div id="demo-desktop"></div>
+        <div id="demo-pill">
+          <div class="pill-inner">
+            <div class="pill-dot" id="pill-dot"></div>
+            <span id="pill-num">3</span>
+          </div>
+        </div>
+        <div id="demo-panel">
+          <div class="demo-notch-gap"></div>
+          <div class="demo-header">
+            <span class="demo-header-title" id="panel-title">Pharmacology</span>
+            <div class="demo-header-right">
+              <span class="demo-badge" id="panel-badge">3 due</span>
+              <button class="demo-anki-btn" id="panel-anki">↗ Anki</button>
+            </div>
+          </div>
+          <div id="panel-body"></div>
+        </div>
+        <div id="demo-hint">Try it — hover the pill</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="kicker">How it works</div>
+    <h2>Hover. Flip. Grade.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <h3>Glance</h3>
+        <p>The pill shows today's due count — limit-adjusted, straight from Anki. Green ✓ means you're caught up.</p>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <h3>Expand</h3>
+        <p>Hover the notch or press ⌘⌥R. The panel drops out with your real card — images, cloze, MathJax and all.</p>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <h3>Grade</h3>
+        <p>Space flips, 1–4 grades, Z undoes. Every answer lands in Anki's scheduler the moment you press it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section id="brain">
+    <div class="kicker">Why it's safe</div>
+    <h2>Anki is the brain. The notch is the face.</h2>
+    <p class="lede">FlashNotch reimplements zero scheduling. It drives Anki's own reviewer over AnkiConnect, so your intervals, daily limits, FSRS and review history stay exactly as Anki computes them.</p>
+    <div class="trust">
+      <ul>
+        <li>Drives Anki's real reviewer — never its own queue</li>
+        <li>Your AnkiWeb history never drifts or double-counts</li>
+        <li>Review-only: card creation and editing stay in Anki</li>
+        <li>Undo maps to Anki's own undo</li>
+        <li>If a card needs more, "↗ Anki" opens it in the full app</li>
+      </ul>
+      <div class="quote">
+        "Other notch reviewers clone your decks into their own database and re-schedule them. FlashNotch doesn't have a database."
+        <small>— the design principle the whole app is built on</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHORTCUTS -->
+  <section id="keys">
+    <div class="kicker">Keyboard-first</div>
+    <h2>Your hands never leave the keys.</h2>
+    <div class="keys">
+      <div class="key"><div class="keycap">⌘⌥R</div><span>summon</span></div>
+      <div class="key"><div class="keycap">Space</div><span>flip · Good</span></div>
+      <div class="key"><div class="keycap">1</div><span>Again</span></div>
+      <div class="key"><div class="keycap">2</div><span>Hard</span></div>
+      <div class="key"><div class="keycap">3</div><span>Good</span></div>
+      <div class="key"><div class="keycap">4</div><span>Easy</span></div>
+      <div class="key"><div class="keycap">Z</div><span>undo</span></div>
+      <div class="key"><div class="keycap">R</div><span>replay audio</span></div>
+      <div class="key"><div class="keycap">Esc</div><span>close</span></div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="kicker">Details</div>
+    <h2>Small app. Sharp edges filed off.</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>Real card rendering</h3>
+        <p>Images, audio, cloze, typed answers and MathJax render like they do in Anki — because it's your actual card.</p>
+      </div>
+      <div class="feature">
+        <h3>Light, dark, system</h3>
+        <p>The panel follows your Mac; cards match Anki night mode exactly. In the dark, the panel is pure black — it fuses with the notch.</p>
+      </div>
+      <div class="feature">
+        <h3>Hover to expand</h3>
+        <p>A 250ms dwell opens the panel; moving away closes it. Or turn it off and use the hotkey.</p>
+      </div>
+      <div class="feature">
+        <h3>Zoom &amp; resize</h3>
+        <p>⌘+ / ⌘− zooms the card. Drag the corner grip to make the panel yours.</p>
+      </div>
+      <div class="feature">
+        <h3>Per-deck review</h3>
+        <p>Pick any deck; its full subtree is reviewed under Anki's daily limits, same as the desktop app.</p>
+      </div>
+      <div class="feature">
+        <h3>Quiet by design</h3>
+        <p>No badges bouncing, no streak guilt. One number in the notch, and a ✓ when you're done.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="kicker">Pricing</div>
+    <h2>One-time. No subscription.</h2>
+    <div class="price-card">
+      <div class="price">$4.99</div>
+      <div class="price-sub">One purchase, yours forever. Updates included.</div>
+      <div class="cta-row" style="margin-top:22px">
+        <a class="mas-btn" href="#">
+          <span class="apple">&#xF8FF;</span>
+          Download on the Mac App Store
+        </a>
+      </div>
+      <div class="price-note">Requires macOS 15 or later. Notch required for the pill; the ⌘⌥R hotkey works on any Mac. Anki and AnkiConnect are free.</div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="kicker">FAQ</div>
+    <h2>Questions</h2>
+    <div class="faq">
+      <details>
+        <summary>Does it touch my scheduling?</summary>
+        <p>No. FlashNotch drives Anki's own GUI reviewer over AnkiConnect. The scheduler, daily limits, learning steps and FSRS run inside Anki — FlashNotch just shows the card and sends your grade.</p>
+      </details>
+      <details>
+        <summary>What do I need installed?</summary>
+        <p>Anki (free) with the AnkiConnect add-on (code: 2055492159), running in the background. FlashNotch walks you through the setup on first launch.</p>
+      </details>
+      <details>
+        <summary>My Mac doesn't have a notch. Can I still use it?</summary>
+        <p>Yes — the ⌘⌥R hotkey summons the review panel on any Mac running macOS 15+. The always-visible pill is notch-only.</p>
+      </details>
+      <details>
+        <summary>Do images and audio work?</summary>
+        <p>Yes. Grant one-time read access to your Anki folder and cards render with their full media. Audio plays through Anki itself, honoring your per-deck autoplay settings.</p>
+      </details>
+      <details>
+        <summary>Can I create or edit cards?</summary>
+        <p>No — by design. FlashNotch is review-only. The "↗ Anki" button jumps to the current card in the full app when you need more.</p>
+      </details>
+      <details>
+        <summary>Does it collect any data?</summary>
+        <p>No. FlashNotch has no accounts, no analytics, and no network activity beyond the local connection to Anki on your own Mac. Nothing leaves your machine. See the <a href="/privacy.html" style="color:var(--accent)">Privacy Policy</a>.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot">
+      <a class="wordmark" href="/" style="font-size:13px">FlashNotch</a>
+      <div class="foot-links">
+        <a href="/privacy.html">Privacy Policy</a>
+        <span>Not affiliated with Anki or AnkiWeb</span>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- .wrap -->
+
+<!-- DEMO SCRIPT -->
+<script>
+(function () {
+  var CARDS = [
+    {
+      q: 'Beta blockers reduce heart rate by blocking <span class="cloze">[...]</span> receptors',
+      a: 'Beta blockers reduce heart rate by blocking <span class="cloze">β₁-adrenergic</span> receptors',
+      next: ['<1m', '<10m', '1d', '4d']
+    },
+    {
+      q: 'First-line treatment for anaphylaxis: <span class="cloze">[...]</span>',
+      a: 'First-line treatment for anaphylaxis: <span class="cloze">IM epinephrine</span>',
+      next: ['<1m', '<10m', '2d', '6d']
+    },
+    {
+      q: 'Warfarin inhibits vitamin <span class="cloze">[...]</span>-dependent clotting factors',
+      a: 'Warfarin inhibits vitamin <span class="cloze">K</span>-dependent clotting factors',
+      next: ['<1m', '<10m', '3d', '8d']
+    }
+  ];
+  var LABELS = ['Again', 'Hard', 'Good', 'Easy'];
+
+  var expanded   = false;
+  var idx        = 0;
+  var showAnswer = false;
+  var reviewed   = 0;
+  var armed      = false;
+  var pillTimer, panelTimer;
+
+  var $pill  = document.getElementById('demo-pill');
+  var $panel = document.getElementById('demo-panel');
+  var $body  = document.getElementById('panel-body');
+  var $title = document.getElementById('panel-title');
+  var $badge = document.getElementById('panel-badge');
+  var $anki  = document.getElementById('panel-anki');
+  var $dot   = document.getElementById('pill-dot');
+  var $num   = document.getElementById('pill-num');
+  var $hint  = document.getElementById('demo-hint');
+  var $demo  = document.getElementById('demo-container');
+
+  function due()  { return CARDS.length - reviewed; }
+  function done() { return reviewed >= CARDS.length; }
+  function card() { return CARDS[idx % CARDS.length]; }
+
+  function render() {
+    /* pill */
+    $dot.className  = 'pill-dot' + (done() ? ' ok' : '');
+    $num.textContent = done() ? '✓' : due();
+
+    /* visibility */
+    $pill.style.display = expanded ? 'none' : 'flex';
+    $panel.className    = expanded ? 'open'  : '';
+
+    /* hint */
+    $hint.textContent = expanded
+      ? 'Space flips · 1–4 grade · Esc closes'
+      : 'Try it — hover the pill';
+
+    if (!expanded) return;
+
+    /* header */
+    $title.textContent  = done() ? 'Done' : 'Pharmacology';
+    $badge.textContent  = done() ? '0 due' : due() + ' due';
+    $anki.style.display = done() ? 'none' : '';
+
+    /* body */
+    if (done()) {
+      $body.innerHTML =
+        '<div class="demo-status">' +
+          '<div class="demo-status-text">Caught up ✓</div>' +
+          '<div class="demo-status-detail">' + reviewed + ' this session</div>' +
+          '<button class="demo-reset-btn" id="reset-btn">Reset demo</button>' +
+        '</div>';
+      document.getElementById('reset-btn').addEventListener('click', function () {
+        reviewed = 0; idx = 0; showAnswer = false; render();
+      });
+    } else if (showAnswer) {
+      var c = card();
+      $body.innerHTML =
+        '<div class="demo-card">' + c.a + '</div>' +
+        '<div class="demo-grade-bar">' +
+          LABELS.map(function (l, i) {
+            return '<button class="demo-grade-btn' + (i === 0 ? ' again' : '') + '">' +
+              '<span class="demo-grade-label">' + l + '</span>' +
+              '<span class="demo-grade-ivl">' + c.next[i] + '</span>' +
+            '</button>';
+          }).join('') +
+        '</div>';
+      Array.from($body.querySelectorAll('.demo-grade-btn')).forEach(function (b) {
+        b.addEventListener('click', grade);
+      });
+    } else {
+      var c = card();
+      $body.innerHTML =
+        '<div class="demo-card">' + c.q + '</div>' +
+        '<div class="demo-footer">' +
+          '<button class="demo-show-btn" id="show-btn">' +
+            '<span>Show Answer</span>' +
+            '<span class="demo-show-hint">Space</span>' +
+          '</button>' +
+        '</div>';
+      document.getElementById('show-btn').addEventListener('click', flip);
+    }
+  }
+
+  function expand()   { clearTimeout(pillTimer); clearTimeout(panelTimer); expanded = true; render(); }
+  function collapse() { expanded = false; render(); }
+  function flip()     { if (!done()) { showAnswer = true; render(); } }
+  function grade()    { if (!done()) { reviewed++; idx++; showAnswer = false; render(); } }
+
+  /* pill hover / click */
+  $pill.addEventListener('mouseenter', function () {
+    clearTimeout(panelTimer);
+    pillTimer = setTimeout(expand, 250);
+  });
+  $pill.addEventListener('mouseleave', function () { clearTimeout(pillTimer); });
+  $pill.addEventListener('click', expand);
+
+  /* panel hover */
+  $panel.addEventListener('mouseenter', function () { clearTimeout(panelTimer); });
+  $panel.addEventListener('mouseleave', function () {
+    panelTimer = setTimeout(collapse, 450);
+  });
+
+  /* keyboard (only while mouse is inside the demo shell) */
+  $demo.addEventListener('mouseenter', function () { armed = true; });
+  $demo.addEventListener('mouseleave', function () {
+    armed = false;
+    clearTimeout(pillTimer);
+    clearTimeout(panelTimer);
+  });
+
+  window.addEventListener('keydown', function (e) {
+    if (!armed || !expanded) return;
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      if (!showAnswer) flip(); else grade();
+    } else if (['1','2','3','4'].indexOf(e.key) !== -1 && showAnswer) {
+      e.preventDefault(); grade();
+    } else if (e.key === 'Escape') {
+      collapse();
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

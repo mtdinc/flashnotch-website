@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — FlashNotch</title>
+<style>
+:root {
+  --accent:       #0a84ff;
+  --text-primary: rgba(255,255,255,0.85);
+  --text-70:      rgba(255,255,255,0.7);
+  --text-55:      rgba(255,255,255,0.55);
+  --fill-subtle:  rgba(255,255,255,0.08);
+  --font-system:  -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: #000; }
+body {
+  background: #000;
+  color: var(--text-primary);
+  font-family: var(--font-system);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+.wrap { max-width: 680px; margin: 0 auto; padding: 0 32px; }
+
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.wordmark {
+  font-size: 15px; font-weight: 600; letter-spacing: -0.01em;
+  color: #fff; text-decoration: none;
+}
+.back { font-size: 13px; color: var(--text-55); text-decoration: none; transition: color 0.15s; }
+.back:hover { color: var(--text-70); }
+
+main { padding: 48px 0 80px; }
+
+h1 {
+  font-size: 30px; font-weight: 600; letter-spacing: -0.02em;
+  color: #fff; margin-bottom: 6px;
+}
+.meta { font-size: 13px; color: var(--text-55); margin-bottom: 40px; }
+
+h2 { font-size: 17px; font-weight: 600; color: #fff; margin: 32px 0 10px; }
+
+p  { font-size: 14px; line-height: 1.75; color: var(--text-70); margin-bottom: 12px; }
+
+ul { margin: 0 0 14px 20px; }
+li { font-size: 14px; line-height: 1.75; color: var(--text-70); margin-bottom: 4px; }
+
+.callout {
+  background: var(--fill-subtle); border-radius: 10px;
+  padding: 18px 20px; margin: 24px 0;
+}
+.callout p { margin: 0; font-weight: 600; color: var(--text-primary); font-size: 15px; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+footer {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 28px 0 40px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; color: var(--text-55);
+}
+footer a { color: var(--text-55); text-decoration: none; }
+footer a:hover { color: var(--text-70); }
+
+@media (max-width: 720px) {
+  .wrap { padding: 0 20px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav>
+    <a class="wordmark" href="/">FlashNotch</a>
+    <a class="back" href="/">← Back</a>
+  </nav>
+
+  <main>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Effective date: June 2026</p>
+
+    <div class="callout">
+      <p>FlashNotch collects no personal data. Nothing leaves your Mac.</p>
+    </div>
+
+    <h2>What FlashNotch does</h2>
+    <p>FlashNotch is a macOS menu-bar app that connects to Anki running locally on your Mac over a loopback HTTP connection (localhost:8765, via the free AnkiConnect add-on). It reads your due cards, displays them in a notch panel, and sends your grade responses back to Anki. That is the entirety of its network activity — and because it uses the loopback address, the connection never leaves your machine.</p>
+
+    <h2>Data we collect</h2>
+    <p>None. FlashNotch does not collect, transmit, store on any server, or share any personal information whatsoever. Specifically:</p>
+    <ul>
+      <li>No account or registration is required.</li>
+      <li>No analytics, crash reporters, or tracking SDKs are included or linked.</li>
+      <li>No data is sent to any remote server — ours or anyone else's.</li>
+      <li>No identifiers (device ID, advertising ID, IP address, or email) are collected.</li>
+      <li>No usage statistics or telemetry of any kind are gathered.</li>
+    </ul>
+
+    <h2>Data stored locally on your Mac</h2>
+    <p>FlashNotch stores a small amount of data locally using standard macOS mechanisms (UserDefaults and a security-scoped bookmark). This data never leaves your Mac and is deleted when you uninstall the app:</p>
+    <ul>
+      <li><strong>Anki media folder bookmark</strong> — a security-scoped reference to your Anki media folder, so the app can display card images and other media files you've already added to Anki.</li>
+      <li><strong>App preferences</strong> — your chosen theme (light/dark/system), panel size, zoom level, global hotkey, hover setting, and other UI preferences.</li>
+    </ul>
+    <p>No card content, review history, deck names, or any Anki data is stored by FlashNotch. That data lives in Anki's own files on your Mac.</p>
+
+    <h2>Anki and AnkiWeb</h2>
+    <p>FlashNotch communicates only with Anki running on your own computer via localhost (127.0.0.1:8765). It does not communicate with AnkiWeb, Ankitects, or any external service. Your Anki collection, card content, and review history remain entirely subject to <a href="https://ankiweb.net/privacy" target="_blank" rel="noopener">Anki's and AnkiWeb's own privacy policy</a>.</p>
+
+    <h2>Mac App Store</h2>
+    <p>FlashNotch is distributed through the Mac App Store. Apple may collect information related to your purchase and download as described in <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple's Privacy Policy</a>. We have no access to that data.</p>
+
+    <h2>Children</h2>
+    <p>FlashNotch does not knowingly collect or solicit any information from anyone, including children under the age of 13 (or the applicable minimum age in your jurisdiction).</p>
+
+    <h2>Changes to this policy</h2>
+    <p>If this policy changes materially, we will update the effective date at the top of this page. Because we collect no data, material changes are unlikely. Continued use of the app after a policy change constitutes acceptance of the updated policy.</p>
+
+    <h2>Contact</h2>
+    <p>If you have questions about this policy, email <a href="mailto:tahadinc@gmail.com">tahadinc@gmail.com</a>.</p>
+  </main>
+
+  <footer>
+    <span>© 2026 FlashNotch</span>
+    <a href="/">flashnotch.app</a>
+  </footer>
+
+</div>
+</body>
+</html>
