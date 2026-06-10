@@ -258,6 +258,23 @@ footer {
 }
 .pill-dot.ok { background: var(--green); }
 
+/* attention: glow + arrow nudging the user to hover the pill */
+#demo-pill.nudge { animation: pillGlow 1.8s ease-in-out infinite; }
+@keyframes pillGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,159,10,0.0); }
+  50%      { box-shadow: 0 6px 22px 2px rgba(255,159,10,0.55); }
+}
+#demo-pill-arrow {
+  position: absolute; top: 48px; left: 50%; transform: translateX(-50%);
+  z-index: 10; color: var(--orange); font-size: 15px; line-height: 1;
+  pointer-events: none; text-shadow: 0 0 10px rgba(255,159,10,0.7);
+  animation: arrowBob 1.4s ease-in-out infinite;
+}
+@keyframes arrowBob {
+  0%, 100% { transform: translateX(-50%) translateY(0);   opacity: 0.55; }
+  50%      { transform: translateX(-50%) translateY(-6px); opacity: 1; }
+}
+
 /* panel */
 #demo-panel {
   position: absolute; top: 0; left: 50%; transform: translateX(-50%);
@@ -287,8 +304,9 @@ footer {
   flex: 1; padding: 14px 16px; font-size: 17px; line-height: 1.5;
   color: rgba(255,255,255,0.9);
   display: flex; align-items: center; justify-content: center;
-  text-align: center; min-height: 110px;
+  min-height: 110px;
 }
+.demo-card-text { text-align: center; }
 .demo-card .cloze { color: lightblue; font-weight: 600; }
 
 .demo-footer { padding: 6px 10px; flex: none; }
@@ -350,7 +368,7 @@ footer {
 
   <!-- NAV -->
   <nav>
-    <a class="wordmark" href="/">FlashNotch</a>
+    <a class="wordmark" href="index.html">FlashNotch</a>
     <div class="nav-links">
       <a href="#how">How it works</a>
       <a href="#keys">Shortcuts</a>
@@ -381,12 +399,13 @@ footer {
           <div class="mr">9:41 AM</div>
         </div>
         <div id="demo-desktop"></div>
-        <div id="demo-pill">
+        <div id="demo-pill" class="nudge">
           <div class="pill-inner">
             <div class="pill-dot" id="pill-dot"></div>
             <span id="pill-num">3</span>
           </div>
         </div>
+        <div id="demo-pill-arrow">▲</div>
         <div id="demo-panel">
           <div class="demo-notch-gap"></div>
           <div class="demo-header">
@@ -539,7 +558,7 @@ footer {
       </details>
       <details>
         <summary>Does it collect any data?</summary>
-        <p>No. FlashNotch has no accounts, no analytics, and no network activity beyond the local connection to Anki on your own Mac. Nothing leaves your machine. See the <a href="/privacy.html" style="color:var(--accent)">Privacy Policy</a>.</p>
+        <p>No. FlashNotch has no accounts, no analytics, and no network activity beyond the local connection to Anki on your own Mac. Nothing leaves your machine. See the <a href="privacy.html" style="color:var(--accent)">Privacy Policy</a>.</p>
       </details>
     </div>
   </section>
@@ -547,9 +566,9 @@ footer {
   <!-- FOOTER -->
   <footer>
     <div class="foot">
-      <a class="wordmark" href="/" style="font-size:13px">FlashNotch</a>
+      <a class="wordmark" href="index.html" style="font-size:13px">FlashNotch</a>
       <div class="foot-links">
-        <a href="/privacy.html">Privacy Policy</a>
+        <a href="privacy.html">Privacy Policy</a>
         <span>Not affiliated with Anki or AnkiWeb</span>
       </div>
     </div>
@@ -584,6 +603,7 @@ footer {
   var showAnswer = false;
   var reviewed   = 0;
   var armed      = false;
+  var hasExpanded = false;
   var pillTimer, panelTimer;
 
   var $pill  = document.getElementById('demo-pill');
@@ -595,6 +615,7 @@ footer {
   var $dot   = document.getElementById('pill-dot');
   var $num   = document.getElementById('pill-num');
   var $hint  = document.getElementById('demo-hint');
+  var $arrow = document.getElementById('demo-pill-arrow');
   var $demo  = document.getElementById('demo-container');
 
   function due()  { return CARDS.length - reviewed; }
@@ -607,8 +628,11 @@ footer {
     $num.textContent = done() ? '✓' : due();
 
     /* visibility */
-    $pill.style.display = expanded ? 'none' : 'flex';
-    $panel.className    = expanded ? 'open'  : '';
+    $pill.style.display  = expanded ? 'none' : 'flex';
+    $panel.className     = expanded ? 'open'  : '';
+    /* hover nudge: glow + arrow, only until the user has opened it once */
+    $arrow.style.display = (expanded || hasExpanded) ? 'none' : 'block';
+    if (hasExpanded) $pill.classList.remove('nudge');
 
     /* hint */
     $hint.textContent = expanded
@@ -636,7 +660,7 @@ footer {
     } else if (showAnswer) {
       var c = card();
       $body.innerHTML =
-        '<div class="demo-card">' + c.a + '</div>' +
+        '<div class="demo-card"><span class="demo-card-text">' + c.a + '</span></div>' +
         '<div class="demo-grade-bar">' +
           LABELS.map(function (l, i) {
             return '<button class="demo-grade-btn' + (i === 0 ? ' again' : '') + '">' +
@@ -651,7 +675,7 @@ footer {
     } else {
       var c = card();
       $body.innerHTML =
-        '<div class="demo-card">' + c.q + '</div>' +
+        '<div class="demo-card"><span class="demo-card-text">' + c.q + '</span></div>' +
         '<div class="demo-footer">' +
           '<button class="demo-show-btn" id="show-btn">' +
             '<span>Show Answer</span>' +
@@ -662,7 +686,7 @@ footer {
     }
   }
 
-  function expand()   { clearTimeout(pillTimer); clearTimeout(panelTimer); expanded = true; render(); }
+  function expand()   { clearTimeout(pillTimer); clearTimeout(panelTimer); expanded = true; hasExpanded = true; render(); }
   function collapse() { expanded = false; render(); }
   function flip()     { if (!done()) { showAnswer = true; render(); } }
   function grade()    { if (!done()) { reviewed++; idx++; showAnswer = false; render(); } }
