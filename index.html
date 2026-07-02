@@ -41,104 +41,246 @@
   ]
 }
 </script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
-/* ── DESIGN TOKENS ─────────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════
+   FLASHNOTCH — "the site has a notch"
+   A real, working notch is pinned to the top of the viewport. Hover it.
+   Editorial dark: Instrument Serif display · Schibsted Grotesk body ·
+   Spline Sans Mono details · amber = due, green = done (the app's own
+   semantics), on warm near-black so the pure-black notch reads as a hole.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── TOKENS ────────────────────────────────────────────────────────────── */
 :root {
-  --accent:    #0a84ff;
-  --green:     #32d74b;
-  --orange:    #ff9f0a;
-  --again-bg:  rgba(255,69,58,0.55);
+  --bg:          #111013;          /* warm near-black — darker than nothing, lighter than the notch */
+  --bg-raise:    #17161a;
+  --ink:         #f4f1ea;          /* warm paper-white */
+  --ink-70:      rgba(244,241,234,0.70);
+  --ink-55:      rgba(244,241,234,0.55);
+  --ink-40:      rgba(244,241,234,0.40);
+  --ink-25:      rgba(244,241,234,0.22);
 
-  --text-primary: rgba(255,255,255,0.88);
-  --text-70:      rgba(255,255,255,0.70);
-  --text-60:      rgba(255,255,255,0.60);
-  --text-55:      rgba(255,255,255,0.55);
-  --text-40:      rgba(255,255,255,0.40);
+  --amber:       #ffb340;          /* due */
+  --amber-deep:  #ff9f0a;
+  --green:       #3ddc68;          /* done */
+  --red:         #ff5d52;          /* Again */
 
-  --fill-subtle:  rgba(255,255,255,0.05);
-  --fill-medium:  rgba(255,255,255,0.10);
-  --fill-strong:  rgba(255,255,255,0.14);
+  --line:        rgba(244,241,234,0.12);
+  --line-soft:   rgba(244,241,234,0.07);
+  --fill:        rgba(244,241,234,0.045);
+  --fill-2:      rgba(244,241,234,0.09);
 
-  --line:         rgba(255,255,255,0.10);
-  --line-soft:    rgba(255,255,255,0.06);
+  --serif:  "Instrument Serif", Georgia, serif;
+  --sans:   "Schibsted Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono:   "Spline Sans Mono", "SF Mono", ui-monospace, monospace;
 
-  --bg-card:      rgba(20,20,22,0.9);
-
-  --font-system:  -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif;
-  --font-rounded: ui-rounded, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --font-serif:   Georgia, "Times New Roman", serif;
-
-  --radius-pill:  9999px;
-  --radius-md:   12px;
-  --radius-lg:   18px;
-  --radius-xl:   24px;
-
-  --maxw:        1100px;
+  --maxw: 1180px;
+  --nav-h: 60px;
 }
 
 /* ── RESET ─────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html  { background: #000; scroll-behavior: smooth; }
-body  {
-  background: #000;
-  color: var(--text-primary);
-  font-family: var(--font-system);
+html { background: var(--bg); scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
   overflow-x: hidden;
 }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; }
 img, svg { display: block; max-width: 100%; }
+::selection { background: var(--amber); color: #16130c; }
 
-.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 32px; }
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 40px; }
 
-/* ── FOCUS ────────────────────────────────────────────────────────────── */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 4px;
+/* ── GRAIN + ATMOSPHERE ────────────────────────────────────────────────── */
+.grain {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.glow {
+  position: absolute; z-index: 0; pointer-events: none;
+  width: 900px; height: 620px;
+  left: 50%; top: -180px; transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(255,179,64,0.10) 0%, rgba(255,179,64,0.035) 38%, transparent 70%);
+  filter: blur(4px);
 }
 
-/* ── STICKY NAV ────────────────────────────────────────────────────────── */
+/* ── FOCUS / SKIP ──────────────────────────────────────────────────────── */
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 4px; }
+.skip-link {
+  position: absolute; top: 8px; left: 16px; z-index: 400;
+  transform: translateY(-260%);
+  background: var(--ink); color: #111;
+  padding: 10px 18px; border-radius: 999px;
+  font-size: 13px; font-weight: 600;
+  transition: transform 0.15s ease;
+}
+.skip-link:focus { transform: translateY(0); }
+#main:focus { outline: none; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   THE NOTCH — fixed to the viewport, always live. This IS the demo.
+   ══════════════════════════════════════════════════════════════════════ */
+#notch {
+  position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+  z-index: 300;
+  height: 34px; min-width: 172px;
+  background: #000;
+  border-radius: 0 0 12px 12px;
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 1px 0 rgba(244,241,234,0.06);
+}
+#notch .cam {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #0c0c0e;
+  box-shadow: inset 0 0 2px 1px rgba(50,60,90,0.5);
+}
+.pill-inner {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 12px; font-weight: 600;
+  font-variant-numeric: tabular-nums; color: #fff;
+}
+.pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber-deep); flex-shrink: 0; }
+.pill-dot.ok { background: var(--green); }
+#notch.nudge { animation: notchGlow 2s ease-in-out infinite; }
+@keyframes notchGlow {
+  0%, 100% { box-shadow: 0 1px 0 rgba(244,241,234,0.06), 0 0 0 0 rgba(255,159,10,0); }
+  50%      { box-shadow: 0 1px 0 rgba(244,241,234,0.06), 0 8px 30px 2px rgba(255,159,10,0.4); }
+}
+
+/* the panel that drops out of the notch */
+#panel {
+  position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+  z-index: 299;
+  width: 400px;
+  background: #000;
+  border-radius: 0 0 22px 22px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 4px 20px rgba(0,0,0,0.5);
+  display: none; flex-direction: column;
+  overflow: hidden;
+}
+#panel.open { display: flex; animation: panelDrop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1); }
+@keyframes panelDrop {
+  from { transform: translateX(-50%) translateY(-24px); opacity: 0.4; }
+  to   { transform: translateX(-50%) translateY(0);     opacity: 1; }
+}
+.panel-notch-gap { height: 36px; flex: none; }
+.panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 16px 6px; flex: none;
+}
+.panel-title { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.9); letter-spacing: 0.01em; }
+.panel-right { display: flex; align-items: center; gap: 10px; }
+.panel-badge { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.55); font-variant-numeric: tabular-nums; }
+.panel-anki-btn {
+  font-size: 12px; color: rgba(255,255,255,0.7);
+  background: none; border: none; padding: 0;
+  transition: color 0.12s, transform 0.12s ease-out;
+}
+.panel-anki-btn:hover { color: #fff; }
+.panel-card {
+  padding: 16px 20px; font-size: 16px; line-height: 1.55;
+  color: rgba(255,255,255,0.92);
+  display: flex; align-items: center; justify-content: center;
+  min-height: 108px; text-align: center;
+}
+.panel-card .cloze { color: #9ecbff; font-weight: 600; }
+.panel-footer { padding: 6px 10px 10px; flex: none; }
+.panel-show-btn {
+  width: 100%; padding: 9px 14px; border-radius: 12px;
+  background: rgba(255,255,255,0.14); border: none;
+  font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.92);
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background 0.12s, transform 0.12s ease-out;
+  min-height: 40px;
+}
+.panel-show-btn:hover { background: rgba(255,255,255,0.2); }
+.panel-show-hint { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.5); }
+.panel-grade-bar { display: flex; gap: 6px; padding: 6px 10px 10px; flex: none; }
+.panel-grade-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  gap: 2px; padding: 6px 0; border-radius: 12px;
+  background: rgba(255,255,255,0.1); border: none;
+  color: rgba(255,255,255,0.92);
+  transition: background 0.12s, transform 0.12s ease-out;
+  min-height: 46px;
+}
+.panel-grade-btn:hover { background: rgba(255,255,255,0.18); }
+.panel-grade-btn.again { background: rgba(255,69,58,0.45); }
+.panel-grade-btn.again:hover { background: rgba(255,69,58,0.6); }
+.panel-grade-label { font-size: 13px; font-weight: 600; }
+.panel-grade-ivl { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.55); font-variant-numeric: tabular-nums; }
+.panel-status {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; padding: 26px 20px 20px;
+}
+.panel-status-text { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.92); }
+.panel-status-detail { font-size: 13px; color: rgba(255,255,255,0.55); }
+.panel-reset-btn {
+  font-size: 12px; color: rgba(255,255,255,0.5); background: none; border: none;
+  padding: 6px 0 0; transition: color 0.12s, transform 0.12s ease-out;
+}
+.panel-reset-btn:hover { color: rgba(255,255,255,0.8); }
+.panel-keys-hint {
+  text-align: center; font-family: var(--mono); font-size: 10px;
+  color: rgba(255,255,255,0.4); padding: 0 0 12px; flex: none;
+}
+
+/* ── NAV (flanks the notch) ────────────────────────────────────────────── */
 .nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 250;
+  height: var(--nav-h);
+  transition: background 0.3s ease, border-color 0.3s ease;
   background: transparent;
   border-bottom: 1px solid transparent;
 }
 .nav.scrolled {
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: saturate(180%) blur(12px);
-  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  background: rgba(17,16,19,0.82);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
   border-bottom: 1px solid var(--line-soft);
 }
 .nav-inner {
   max-width: var(--maxw); margin: 0 auto;
-  padding: 16px 32px;
-  display: flex; align-items: center; justify-content: space-between;
+  height: 100%;
+  padding: 0 40px;
+  display: flex; align-items: center;
   gap: 16px;
 }
+.nav-cta-slot { margin-left: auto; }
 .wordmark {
-  font-size: 15px; font-weight: 600; letter-spacing: -0.01em;
-  color: #fff;
-  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--serif); font-size: 21px; letter-spacing: 0.01em;
+  color: var(--ink);
+  display: inline-flex; align-items: baseline; gap: 2px;
 }
-.wordmark .dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 10px rgba(50,215,75,0.6);
-}
-.nav-links {
-  display: flex; align-items: center; gap: 28px;
-}
+.wordmark em { font-style: italic; color: var(--amber); }
+/* links sit LEFT beside the wordmark; CTA sits right — the center stays clear
+   for the live notch. Below 1180px the links fold into the hamburger. */
+.nav-links { display: flex; align-items: center; gap: 22px; margin-left: 34px; margin-right: auto; }
 .nav-links a {
-  font-size: 13px; color: var(--text-70);
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-55);
   transition: color 0.15s;
 }
-.nav-links a:hover { color: #fff; }
-
+.nav-links a:hover { color: var(--ink); }
 .nav-cta-slot { display: flex; align-items: center; gap: 10px; }
 
 .hamburger {
@@ -146,7 +288,7 @@ img, svg { display: block; max-width: 100%; }
   background: none; border: none;
   width: 44px; height: 44px;
   align-items: center; justify-content: center;
-  color: #fff;
+  color: var(--ink);
   border-radius: 8px;
   transition: transform 0.12s ease-out;
 }
@@ -154,30 +296,24 @@ img, svg { display: block; max-width: 100%; }
 
 .mobile-menu {
   display: none;
-  position: fixed; top: 57px; left: 0; right: 0; z-index: 99;
-  background: rgba(0,0,0,0.96);
+  position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 240;
+  background: rgba(14,13,16,0.97);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--line);
-  padding: 16px 32px 24px;
-  flex-direction: column;
-  gap: 4px;
-  transform: translateY(-8px);
-  opacity: 0;
-  pointer-events: none;
+  padding: 12px 24px 24px;
+  flex-direction: column; gap: 0;
+  transform: translateY(-8px); opacity: 0; pointer-events: none;
   transition: transform 0.22s ease, opacity 0.22s ease;
 }
-.mobile-menu.open {
-  transform: translateY(0);
-  opacity: 1;
-  pointer-events: auto;
-}
+.mobile-menu.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
 .mobile-menu a {
-  font-size: 15px; color: var(--text-primary);
-  padding: 12px 0;
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink);
+  padding: 15px 0;
   border-bottom: 1px solid var(--line-soft);
 }
-.mobile-menu .mobile-cta { margin-top: 12px; border-bottom: none; }
+.mobile-menu .mobile-cta { margin-top: 14px; border-bottom: none; }
 .mobile-menu .mobile-cta .btn { width: 100%; justify-content: center; }
 
 /* ── BUTTONS ───────────────────────────────────────────────────────────── */
@@ -185,482 +321,518 @@ img, svg { display: block; max-width: 100%; }
   display: inline-flex; align-items: center; justify-content: center;
   gap: 10px;
   font-size: 14px; font-weight: 600;
-  padding: 12px 22px;
-  border-radius: var(--radius-pill);
+  padding: 12px 24px;
+  border-radius: 999px;
   border: 1px solid transparent;
-  transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease, transform 0.12s ease-out;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.12s ease-out;
   min-height: 44px;
   white-space: nowrap;
 }
-.btn-primary {
-  background: #fff; color: #000;
-}
-.btn-primary:hover { background: rgba(255,255,255,0.88); }
-.btn-secondary {
-  background: #1F1F22; color: #fff;
-  border-color: var(--line-soft);
-}
-.btn-secondary:hover { background: #2A2A2E; }
+.btn-primary { background: var(--ink); color: #16130c; }
+.btn-primary:hover { background: var(--amber); }
 .btn .apple { font-size: 16px; line-height: 1; }
-.btn:focus-visible { outline-offset: 3px; }
-
-/* ── PRESS FEEDBACK ────────────────────────────────────────────────────── */
-/* Tactile 0.96 dip on every button/CTA; the transform transition lives on
-   each element above (never `transition: all`). Disabled under reduced-motion. */
-.btn:active,
-.hamburger:active,
-.faq-trigger:active,
-.demo-show-btn:active,
-.demo-grade-btn:active,
-.demo-anki-btn:active,
-.demo-reset-btn:active { transform: scale(0.96); }
-
-/* ── PILL BADGE ────────────────────────────────────────────────────────── */
-.pill-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.10);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  font-size: 12px; font-weight: 500;
-  color: var(--text-70);
-  letter-spacing: 0.01em;
-}
-.pill-badge .spark { font-size: 13px; }
+.btn:active, .hamburger:active, .faq-trigger:active,
+.panel-show-btn:active, .panel-grade-btn:active,
+.panel-anki-btn:active, .panel-reset-btn:active { transform: scale(0.96); }
 
 /* ── HERO ──────────────────────────────────────────────────────────────── */
 .hero {
-  padding-top: 120px;
-  padding-bottom: 60px;
+  position: relative;
+  padding-top: calc(var(--nav-h) + 74px);
+  padding-bottom: 40px;
   text-align: center;
+  z-index: 2;
 }
-.hero-inner { max-width: 760px; margin: 0 auto; }
+.hero-inner { max-width: 900px; margin: 0 auto; position: relative; }
+
+.try-notch {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--amber);
+  margin-bottom: 34px;
+}
+.try-notch .up { display: inline-block; animation: bob 1.6s ease-in-out infinite; font-size: 13px; }
+@keyframes bob {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50%      { transform: translateY(-5px); opacity: 1; }
+}
+
 h1 {
-  font-size: clamp(38px, 7vw, 64px);
-  font-weight: 600; letter-spacing: -0.028em; line-height: 1.05;
-  margin: 22px 0 0;
-  color: #fff;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(52px, 8.6vw, 108px);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  color: var(--ink);
   text-wrap: balance;
 }
-.accent-italic {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: 0;
-}
+h1 em { font-style: italic; color: var(--amber); letter-spacing: 0; }
 .sub {
-  font-size: clamp(15px, 2vw, 18px);
-  line-height: 1.55;
-  color: var(--text-70);
-  max-width: 580px;
-  margin: 20px auto 0;
-}
-.cta-row {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
-  gap: 12px; margin-top: 28px;
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 1.6;
+  color: var(--ink-70);
+  max-width: 600px;
+  margin: 28px auto 0;
+  text-wrap: pretty;
 }
 .cta-meta {
-  font-size: 12px; color: var(--text-55); margin-top: 16px;
+  font-family: var(--mono);
+  font-size: 11.5px; letter-spacing: 0.03em;
+  color: var(--ink-40); margin-top: 18px;
 }
+.hero .maker-line {
+  margin-top: 6px;
+}
+
+/* staggered load-in */
+.rise { opacity: 0; transform: translateY(16px); animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+.rise.d1 { animation-delay: 0.05s; }
+.rise.d2 { animation-delay: 0.15s; }
+.rise.d3 { animation-delay: 0.28s; }
+.rise.d4 { animation-delay: 0.4s; }
+.rise.d5 { animation-delay: 0.5s; }
+@keyframes rise { to { opacity: 1; transform: none; } }
 
 /* ── WAITLIST FORM ─────────────────────────────────────────────────────── */
 .waitlist {
   display: flex; flex-direction: column; align-items: stretch; gap: 8px;
-  width: 100%; max-width: 420px; margin: 28px auto 0;
+  width: 100%; max-width: 440px; margin: 34px auto 0;
 }
-.waitlist-row {
-  display: flex; gap: 8px; align-items: stretch;
-}
+.waitlist-row { display: flex; gap: 8px; align-items: stretch; }
 .waitlist input[type="email"] {
   flex: 1;
-  padding: 12px 18px;
-  border-radius: var(--radius-pill);
-  background: rgba(255,255,255,0.06);
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--fill);
   border: 1px solid var(--line);
-  color: #fff; font-size: 14px; font-family: inherit;
-  min-height: 44px;
+  color: var(--ink); font-size: 14px; font-family: inherit;
+  min-height: 46px;
   transition: border-color 0.15s, background 0.15s;
 }
-.waitlist input[type="email"]::placeholder { color: var(--text-55); }
+.waitlist input[type="email"]::placeholder { color: var(--ink-40); }
 .waitlist input[type="email"]:focus {
   outline: none;
-  border-color: var(--accent);
-  background: rgba(10,132,255,0.08);
+  border-color: var(--amber);
+  background: rgba(255,179,64,0.06);
 }
 .waitlist .btn-primary { flex-shrink: 0; }
 .waitlist-msg {
-  font-size: 13px; color: var(--text-70);
-  text-align: left; min-height: 18px;
-  margin-top: 2px;
+  font-size: 13px; color: var(--ink-70);
+  text-align: left; min-height: 18px; margin-top: 2px;
 }
 .waitlist-msg.success { color: var(--green); }
-.waitlist-msg.error   { color: var(--orange); }
+.waitlist-msg.error   { color: var(--amber); }
 .waitlist-meta {
-  font-size: 12px; color: var(--text-55);
-  margin-top: 2px;
+  font-family: var(--mono);
+  font-size: 11px; line-height: 1.7; color: var(--ink-40); margin-top: 2px;
+  text-align: left;
 }
-.waitlist a.mailto-fallback {
-  color: var(--accent);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
+.waitlist a.mailto-fallback,
+.waitlist-share a { color: var(--amber); text-decoration: underline; text-underline-offset: 2px; }
+.waitlist-share { font-size: 12px; color: var(--ink-55); margin-top: 8px; text-align: left; }
 
-/* ── FLOATING MOCKUP CARDS ─────────────────────────────────────────────── */
-.mock-card {
-  background: var(--bg-card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.02);
-  overflow: hidden;
+/* anti-CLS reserve for the JS-rendered CTA slots */
+#hero-cta, #price-cta, #closing-cta { display: flow-root; min-height: 158px; }
+
+/* ── MOBILE STICKY CTA ─────────────────────────────────────────────────── */
+.mobile-sticky-cta {
+  display: none;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 200;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: rgba(14,13,16,0.94);
+  backdrop-filter: saturate(160%) blur(12px);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  border-top: 1px solid var(--line-soft);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.mobile-sticky-cta .btn { width: 100%; justify-content: center; }
+.mobile-sticky-cta.is-hidden { transform: translateY(120%); opacity: 0; pointer-events: none; }
+
+/* ── TICKER ────────────────────────────────────────────────────────────── */
+.ticker-wrap {
   position: relative;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+  overflow: hidden;
+  padding: 18px 0;
+  margin-top: 64px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
-.mock-card.glass {
-  background: rgba(28,28,30,0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+.ticker {
+  display: flex; gap: 56px; width: max-content;
+  animation: ticker 46s linear infinite;
 }
-
-/* hero demo card */
-.hero-demo-card {
-  margin-top: 56px;
-  padding: 0;
+.ticker-wrap:hover .ticker { animation-play-state: paused; }
+@keyframes ticker { to { transform: translateX(-50%); } }
+.tick {
+  display: inline-flex; align-items: baseline; gap: 12px;
+  font-family: var(--mono); font-size: 12.5px; white-space: nowrap;
+  color: var(--ink-55);
 }
+.tick .q { color: var(--ink-70); }
+.tick .a { color: var(--amber); }
+.tick .g { color: var(--green); }
+.tick .sep { color: var(--ink-25); }
 
 /* ── SECTION COMMON ────────────────────────────────────────────────────── */
-section { padding: 96px 0; }
-.section-kicker {
-  font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--text-55);
+section { position: relative; padding: 110px 0; z-index: 2; }
+.sec-head {
+  display: flex; align-items: baseline; gap: 20px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 22px;
+}
+.sec-index {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em;
+  color: var(--amber);
+  flex-shrink: 0;
+}
+.sec-kicker {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-55);
 }
 h2 {
-  font-size: clamp(28px, 4.5vw, 40px);
-  font-weight: 600; letter-spacing: -0.022em; line-height: 1.1;
-  margin: 12px 0 0; color: #fff;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(36px, 5vw, 58px);
+  line-height: 1.04; letter-spacing: -0.01em;
+  margin: 34px 0 0; color: var(--ink);
   text-wrap: balance;
 }
-h3 {
-  font-size: 17px; font-weight: 600; letter-spacing: -0.01em;
-  color: #fff;
-  text-wrap: pretty;
-}
+h2 em { font-style: italic; color: var(--amber); }
+h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); text-wrap: pretty; }
 .lede {
-  font-size: 16px; line-height: 1.6; color: var(--text-70);
-  max-width: 580px; margin: 16px 0 0;
+  font-size: 17px; line-height: 1.65; color: var(--ink-70);
+  max-width: 620px; margin: 18px 0 0;
   text-wrap: pretty;
 }
-/* subheads + running copy: avoid orphans / ragged short last lines */
 .sub, .faq-answer, .step p, .feature p, .col-text p,
 .feature-bullets li, .founder p, .price-sub, .price-note,
 .foot-brand p, .cta-meta, .risk-line { text-wrap: pretty; }
 
-/* alternating two-column row */
-.row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 56px;
-  align-items: center;
-  margin-top: 48px;
-}
-.row.reverse > .col-text { order: 2; }
-.col-text { max-width: 460px; }
-.col-text .lede { margin-bottom: 20px; }
-.col-text .feature-bullets {
-  list-style: none; padding: 0; margin: 20px 0 0;
-  display: flex; flex-direction: column; gap: 10px;
-}
-.col-text .feature-bullets li {
-  font-size: 14px; line-height: 1.5; color: var(--text-70);
-  padding-left: 22px; position: relative;
-}
-.col-text .feature-bullets li::before {
-  content: "✓"; position: absolute; left: 0; top: 0;
-  color: var(--green); font-weight: 600;
-}
-
 /* ── HOW IT WORKS ──────────────────────────────────────────────────────── */
 .how-grid {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  gap: 16px; margin-top: 40px;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  margin-top: 56px;
+  border-top: 1px solid var(--line-soft);
 }
 .step {
-  background: var(--fill-subtle);
-  border: 1px solid var(--line-soft);
-  border-radius: var(--radius-lg);
-  padding: 26px 22px;
+  padding: 34px 30px 38px;
+  border-left: 1px solid var(--line-soft);
+  position: relative;
 }
+.step:first-child { border-left: none; padding-left: 0; }
 .step .n {
-  font-family: var(--font-rounded);
-  font-weight: 600; font-size: 12px;
-  color: var(--accent);
-  letter-spacing: 0.04em;
+  font-family: var(--serif); font-style: italic;
+  font-size: 62px; line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--ink-25);
 }
-.step h3 { font-size: 17px; font-weight: 600; margin: 10px 0 8px; color: #fff; }
-.step p  { font-size: 14px; line-height: 1.55; color: var(--text-70); }
+.step:hover .n { color: var(--amber); -webkit-text-stroke: 1px var(--amber); transition: color 0.4s, -webkit-text-stroke 0.4s; }
+.step h3 { font-size: 19px; margin: 20px 0 10px; }
+.step p { font-size: 14.5px; line-height: 1.6; color: var(--ink-70); }
 
-/* ── COMPARISON TABLE ──────────────────────────────────────────────────── */
+/* ── COMPARISON ────────────────────────────────────────────────────────── */
 .compare {
-  margin-top: 40px;
+  margin-top: 56px;
   border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
+  border-radius: 18px;
   overflow: hidden;
-  background: var(--fill-subtle);
+  background: var(--fill);
 }
 .compare-row {
   display: grid;
-  grid-template-columns: 1.1fr 1fr 1fr;
+  grid-template-columns: 1.05fr 1fr 1fr;
   align-items: stretch;
   border-bottom: 1px solid var(--line-soft);
 }
 .compare-row:last-child { border-bottom: none; }
-.compare-row.head {
-  background: rgba(255,255,255,0.03);
-}
+.compare-row.head { background: rgba(244,241,234,0.03); }
 .compare-cell {
-  padding: 18px 20px;
+  padding: 19px 22px;
   font-size: 14px; line-height: 1.5;
-  color: var(--text-70);
+  color: var(--ink-70);
   border-right: 1px solid var(--line-soft);
 }
 .compare-cell:last-child { border-right: none; }
 .compare-cell.label {
-  color: var(--text-primary); font-weight: 600;
-  font-size: 13px;
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-55);
+  display: flex; align-items: center;
 }
-.compare-cell.head-cell {
-  font-size: 13px; font-weight: 600;
-  color: #fff;
-}
+.compare-cell.head-cell { font-size: 13.5px; font-weight: 600; color: var(--ink); }
 .compare-cell.head-cell.us { color: var(--green); }
-.compare-cell.us { color: var(--text-primary); }
-.compare-cell .check { color: var(--green); margin-right: 6px; font-weight: 700; }
-.compare-cell .dash { color: var(--text-40); margin-right: 6px; }
+.compare-cell.us { color: var(--ink); background: rgba(61,220,104,0.025); }
+.compare-cell .check { color: var(--green); margin-right: 7px; font-weight: 700; }
+.compare-cell .dash { color: var(--ink-25); margin-right: 7px; }
 
 /* ── FOUNDER NOTE ──────────────────────────────────────────────────────── */
 .founder {
-  margin-top: 40px;
-  background: var(--fill-subtle);
-  border: 1px solid var(--line-soft);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius-lg);
-  padding: 28px 30px;
-  max-width: 720px;
+  margin-top: 64px;
+  max-width: 780px;
+  position: relative;
+  padding-left: 36px;
+}
+.founder::before {
+  content: "“";
+  position: absolute; left: -6px; top: -26px;
+  font-family: var(--serif); font-style: italic;
+  font-size: 110px; line-height: 1; color: var(--amber);
+  opacity: 0.85;
 }
 .founder p {
-  font-size: 16px; line-height: 1.65;
-  color: var(--text-primary);
-  font-family: var(--font-serif);
-  font-style: italic;
-  letter-spacing: 0.005em;
+  font-family: var(--serif); font-style: italic;
+  font-size: clamp(20px, 2.6vw, 26px); line-height: 1.5;
+  color: var(--ink);
 }
 .founder .sig {
-  margin-top: 14px;
-  font-family: var(--font-system);
-  font-style: normal;
-  font-size: 13px;
-  color: var(--text-55);
+  margin-top: 18px;
+  font-family: var(--mono); font-style: normal;
+  font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-40);
 }
 
-/* ── MINI MOCKUPS ──────────────────────────────────────────────────────── */
+/* ── KEYCAPS ───────────────────────────────────────────────────────────── */
+.keys {
+  display: flex; flex-wrap: wrap; gap: 20px 26px;
+  margin-top: 56px;
+  justify-content: center;
+}
+.key { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.keycap {
+  min-width: 52px; height: 52px;
+  padding: 0 16px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: linear-gradient(180deg, #232127 0%, #1a181d 100%);
+  border: 1px solid rgba(244,241,234,0.14);
+  border-bottom-width: 3px;
+  border-radius: 10px;
+  font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--ink);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.4), inset 0 1px 0 rgba(244,241,234,0.08);
+  transition: transform 0.1s ease-out, border-bottom-width 0.1s ease-out, box-shadow 0.1s;
+}
+.key:hover .keycap {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(244,241,234,0.08);
+}
+.key span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-55); }
+
+/* ── DETAIL ROWS ───────────────────────────────────────────────────────── */
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+  margin-top: 88px;
+}
+.row:first-of-type { margin-top: 64px; }
+.row.reverse > .col-text { order: 2; }
+.col-text { max-width: 470px; }
+.col-text h3 { font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.15; }
+.col-text .lede { font-size: 15.5px; margin-top: 16px; }
+.feature-bullets {
+  list-style: none; padding: 0; margin: 24px 0 0;
+  display: flex; flex-direction: column; gap: 11px;
+}
+.feature-bullets li {
+  font-size: 14px; line-height: 1.55; color: var(--ink-70);
+  padding-left: 24px; position: relative;
+}
+.feature-bullets li::before {
+  content: "✓"; position: absolute; left: 0; top: 0;
+  color: var(--green); font-weight: 700;
+}
+
+/* mockup shells */
+.mock-card {
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.5);
+  overflow: hidden;
+  position: relative;
+}
 .mini {
-  padding: 24px;
+  padding: 28px;
   display: flex; flex-direction: column;
   gap: 14px;
-  min-height: 280px;
+  min-height: 300px;
   justify-content: center;
 }
 
 /* deck picker mockup */
-.mini-deck-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 11px 14px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--line-soft);
-  border-radius: 10px;
-  font-size: 13px;
-}
-.mini-deck-name { color: var(--text-primary); font-weight: 500; }
-.mini-deck-meta {
-  display: flex; align-items: center; gap: 10px;
-  font-variant-numeric: tabular-nums;
-}
-.mini-deck-due {
-  font-size: 12px; font-weight: 600;
-  color: var(--orange);
-  background: rgba(255,159,10,0.12);
-  padding: 3px 8px; border-radius: var(--radius-pill);
-}
-.mini-deck-due.zero {
-  color: var(--text-40);
-  background: transparent;
-}
 .mini-deck-title {
-  font-size: 12px; color: var(--text-55);
-  text-transform: uppercase; letter-spacing: 0.06em;
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-40);
+  text-transform: uppercase; letter-spacing: 0.1em;
   margin-bottom: 4px;
 }
+.mini-deck-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 15px;
+  background: var(--fill);
+  border: 1px solid var(--line-soft);
+  border-radius: 11px;
+  font-size: 13.5px;
+}
+.mini-deck-name { color: var(--ink); font-weight: 500; }
+.mini-deck-due {
+  font-family: var(--mono);
+  font-size: 12px; font-weight: 600;
+  color: var(--amber);
+  background: rgba(255,179,64,0.1);
+  padding: 3px 9px; border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+.mini-deck-due.zero { color: var(--green); background: rgba(61,220,104,0.08); }
 
-/* light-mode panel mockup */
+/* light-mode mockup */
+.mini-light-label {
+  font-family: var(--mono); font-size: 10.5px; color: var(--ink-40);
+  text-align: center; text-transform: uppercase; letter-spacing: 0.1em;
+}
 .mini-light {
-  background: #f5f5f7;
-  color: #1d1d1f;
-  border-radius: 14px;
-  padding: 18px 20px;
-  display: flex; flex-direction: column;
-  gap: 12px;
+  background: #f5f5f7; color: #1d1d1f;
+  border-radius: 16px;
+  padding: 20px 22px;
+  display: flex; flex-direction: column; gap: 12px;
 }
 .mini-light .mini-light-header {
   display: flex; align-items: center; justify-content: space-between;
   font-size: 12px; color: #6e6e73;
 }
 .mini-light .mini-light-card {
-  font-size: 15px; line-height: 1.5;
-  color: #1d1d1f;
-  padding: 14px 16px;
+  font-size: 15px; line-height: 1.5; color: #1d1d1f;
+  padding: 16px 18px;
   background: #fff;
   border: 1px solid rgba(0,0,0,0.06);
-  border-radius: 10px;
-  min-height: 80px;
+  border-radius: 11px;
+  min-height: 84px;
   display: flex; align-items: center;
 }
-.mini-light .mini-light-card .cloze-light {
+.mini-light .cloze-light {
   color: #0050c8; font-weight: 600;
   background: rgba(0,80,200,0.08);
   padding: 0 4px; border-radius: 3px;
 }
-.mini-light .mini-light-grade {
-  display: flex; gap: 6px;
-}
+.mini-light .mini-light-grade { display: flex; gap: 6px; }
 .mini-light .mini-light-grade span {
   flex: 1; text-align: center;
   font-size: 11px; font-weight: 600;
-  padding: 6px 0; border-radius: 6px;
+  padding: 7px 0; border-radius: 7px;
   color: #1d1d1f;
   background: rgba(0,0,0,0.06);
 }
-.mini-light .mini-light-grade span.again {
-  background: rgba(255,69,58,0.15);
-  color: #c00;
-}
-.mini-light-label {
-  font-size: 11px; color: var(--text-55);
-  text-align: center; margin-top: 4px;
-}
+.mini-light .mini-light-grade span.again { background: rgba(255,69,58,0.15); color: #c00; }
 
 /* caught-up mockup */
 .mini-caughtup {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  gap: 12px;
-  padding: 36px 20px;
-  text-align: center;
+  gap: 12px; padding: 36px 20px; text-align: center;
 }
 .mini-caughtup .check {
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  background: rgba(50,215,75,0.12);
-  border: 1px solid rgba(50,215,75,0.3);
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(61,220,104,0.1);
+  border: 1px solid rgba(61,220,104,0.3);
   display: flex; align-items: center; justify-content: center;
   color: var(--green); font-size: 24px; font-weight: 700;
 }
-.mini-caughtup .t {
-  font-size: 16px; font-weight: 600; color: var(--text-primary);
-}
-.mini-caughtup .d {
-  font-size: 13px; color: var(--text-60);
-}
+.mini-caughtup .t { font-size: 17px; font-weight: 600; color: var(--ink); }
+.mini-caughtup .d { font-family: var(--mono); font-size: 12px; color: var(--ink-55); }
 .mini-caughtup .pill-caughtup {
-  margin-top: 8px;
+  margin-top: 10px;
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 5px 12px;
+  padding: 6px 14px;
   background: #000;
-  border-radius: 0 0 10px 10px;
-  font-family: var(--font-rounded);
-  font-size: 11px; font-weight: 600;
+  border-radius: 0 0 11px 11px;
+  font-family: var(--mono); font-size: 11px; font-weight: 600;
   color: var(--green);
 }
 
-/* ── SHORTCUTS ─────────────────────────────────────────────────────────── */
-.keys {
-  display: flex; flex-wrap: wrap; gap: 14px;
-  margin-top: 40px;
-  justify-content: center;
-}
-.key { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.keycap {
-  min-width: 44px; min-height: 44px;
-  padding: 0 14px;
-  display: inline-flex; align-items: center; justify-content: center;
-  background: var(--fill-medium);
-  border-radius: var(--radius-md);
-  border-bottom: 2px solid rgba(255,255,255,0.18);
-  font-size: 14px; font-weight: 600; color: #fff;
-  font-family: var(--font-rounded);
-}
-.key span { font-size: 11px; color: var(--text-60); }
-
-/* ── FEATURES ──────────────────────────────────────────────────────────── */
+/* ── FEATURE GRID ──────────────────────────────────────────────────────── */
 .features {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  gap: 16px; margin-top: 40px;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin-top: 56px;
+  background: var(--line-soft);
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  overflow: hidden;
 }
 .feature {
-  background: var(--fill-subtle);
-  border: 1px solid var(--line-soft);
-  border-radius: var(--radius-lg);
-  padding: 24px 22px;
+  background: var(--bg);
+  padding: 30px 26px;
+  transition: background 0.25s;
 }
-.feature h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: #fff; }
-.feature p  { font-size: 13px; line-height: 1.55; color: var(--text-70); }
+.feature:hover { background: var(--bg-raise); }
+.feature .glyph {
+  font-family: var(--mono); font-size: 12px; color: var(--amber);
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+.feature h3 { font-size: 15.5px; margin-bottom: 8px; }
+.feature p { font-size: 13.5px; line-height: 1.6; color: var(--ink-70); }
 
-/* ── PRICING ──────────────────────────────────────────────────────────── */
+/* ── PRICING ───────────────────────────────────────────────────────────── */
 .price-card {
-  margin-top: 40px;
-  background: var(--fill-subtle);
+  margin: 56px auto 0;
+  background: var(--fill);
   border: 1px solid var(--line);
-  border-radius: var(--radius-xl);
-  padding: 44px 36px;
+  border-radius: 26px;
+  padding: 54px 40px 44px;
   text-align: center;
-  max-width: 520px; margin-left: auto; margin-right: auto;
+  max-width: 560px;
+  position: relative;
+  overflow: hidden;
+}
+.price-card::before {
+  content: "";
+  position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+  width: 420px; height: 240px;
+  background: radial-gradient(ellipse at center, rgba(255,179,64,0.12), transparent 70%);
+  pointer-events: none;
 }
 .price {
-  font-family: var(--font-rounded); font-size: 52px; font-weight: 600;
-  color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
+  font-family: var(--serif);
+  font-size: 84px; line-height: 1;
+  color: var(--ink); font-variant-numeric: tabular-nums;
 }
-.price-sub  { font-size: 15px; color: var(--text-70); margin-top: 8px; }
-.price-note { font-size: 12px; color: var(--text-55); margin-top: 22px; line-height: 1.5; }
-.price-card .waitlist { margin-top: 28px; }
+.price sup { font-size: 34px; vertical-align: 26px; color: var(--ink-55); margin-right: 2px; }
+.price-sub { font-size: 15.5px; color: var(--ink-70); margin-top: 12px; }
+.price-note {
+  font-family: var(--mono);
+  font-size: 11px; line-height: 1.7; color: var(--ink-40); margin-top: 26px;
+}
+.price-card .waitlist { margin-top: 30px; }
+.price-card .waitlist-meta, .price-card .waitlist-msg { text-align: left; }
 
-/* ── FAQ ACCORDION ─────────────────────────────────────────────────────── */
-.faq-wrap {
-  margin-top: 40px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: transparent;
-}
-.faq-item {
-  border-bottom: 1px solid var(--line-soft);
-}
-.faq-item:last-child { border-bottom: none; }
+/* ── FAQ ───────────────────────────────────────────────────────────────── */
+.faq-wrap { margin-top: 56px; border-top: 1px solid var(--line); }
+.faq-item { border-bottom: 1px solid var(--line); }
 .faq-trigger {
   width: 100%;
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 16px;
-  padding: 20px 24px;
+  display: flex; align-items: center; gap: 24px;
+  padding: 26px 4px;
   background: none; border: none;
   text-align: left;
-  font-size: 15px; font-weight: 600; color: #fff;
-  transition: background 0.15s ease, transform 0.12s ease-out;
+  font-family: var(--serif); font-weight: 400;
+  font-size: clamp(19px, 2.4vw, 24px); color: var(--ink);
+  transition: color 0.15s ease, transform 0.12s ease-out;
 }
-.faq-trigger:hover { background: rgba(255,255,255,0.02); }
+.faq-trigger:hover { color: var(--amber); }
+.faq-num {
+  font-family: var(--mono); font-size: 11px; color: var(--ink-40);
+  flex-shrink: 0; width: 28px;
+}
+.faq-q { flex: 1; }
 .faq-icon {
   flex-shrink: 0;
-  width: 22px; height: 22px;
+  width: 24px; height: 24px;
   display: inline-flex; align-items: center; justify-content: center;
   position: relative;
-  color: var(--text-55);
+  color: var(--ink-40);
   transition: transform 0.25s ease, color 0.2s;
 }
 .faq-icon::before, .faq-icon::after {
@@ -668,275 +840,124 @@ h3 {
   background: currentColor;
   border-radius: 2px;
 }
-.faq-icon::before { width: 12px; height: 1.6px; }
-.faq-icon::after  { width: 1.6px; height: 12px; transition: transform 0.25s ease; }
-.faq-item.open .faq-icon { color: var(--accent); }
+.faq-icon::before { width: 14px; height: 1.6px; }
+.faq-icon::after  { width: 1.6px; height: 14px; transition: transform 0.25s ease; }
+.faq-item.open .faq-icon { color: var(--amber); }
 .faq-item.open .faq-icon::after { transform: rotate(90deg); }
-.faq-panel {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s ease;
-}
+.faq-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
 .faq-item.open .faq-panel { grid-template-rows: 1fr; }
-.faq-panel-inner {
-  overflow: hidden;
-}
+.faq-panel-inner { overflow: hidden; }
 .faq-answer {
-  padding: 0 24px 22px;
-  font-size: 14px; line-height: 1.65; color: var(--text-70);
-  max-width: 720px;
+  padding: 0 56px 28px;
+  font-size: 15px; line-height: 1.7; color: var(--ink-70);
+  max-width: 760px;
 }
-.faq-answer a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+.faq-answer a { color: var(--amber); text-decoration: underline; text-underline-offset: 2px; }
 
-/* ── CLOSING CTA ──────────────────────────────────────────────────────── */
+/* ── CLOSING ───────────────────────────────────────────────────────────── */
 .closing-cta {
   text-align: center;
-  padding: 80px 0 40px;
+  padding: 120px 0 80px;
+  position: relative;
 }
-.closing-cta h2 {
-  font-size: clamp(32px, 5vw, 48px);
+.closing-cta::before {
+  content: "";
+  position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+  width: 700px; height: 400px;
+  background: radial-gradient(ellipse at center, rgba(255,179,64,0.07), transparent 70%);
+  pointer-events: none;
 }
-.closing-cta .sub {
-  margin-bottom: 8px;
-}
+.closing-cta h2 { font-size: clamp(44px, 6.5vw, 84px); }
+.closing-cta .sub { margin-top: 24px; }
 .risk-line {
-  font-size: 13px; color: var(--text-55);
-  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: 0.03em; color: var(--ink-40);
+  margin-top: 20px;
 }
 
 /* ── FOOTER ────────────────────────────────────────────────────────────── */
 footer {
   border-top: 1px solid var(--line-soft);
-  padding: 48px 0 40px;
-  margin-top: 40px;
+  padding: 56px 0 44px;
+  position: relative; z-index: 2;
 }
 .foot-grid {
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr;
   gap: 40px;
-  margin-bottom: 36px;
+  margin-bottom: 40px;
 }
 .foot-col h4 {
-  font-size: 12px; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 0.08em;
-  color: var(--text-55);
-  margin-bottom: 14px;
+  font-family: var(--mono);
+  font-size: 11px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--ink-40);
+  margin-bottom: 16px;
 }
 .foot-col a {
   display: block;
-  font-size: 14px; color: var(--text-70);
+  font-size: 14px; color: var(--ink-70);
   padding: 6px 0;
   transition: color 0.15s;
 }
-.foot-col a:hover { color: #fff; }
-.foot-brand .wordmark { margin-bottom: 12px; }
-.foot-brand p {
-  font-size: 13px; color: var(--text-55); line-height: 1.55;
-  max-width: 320px;
-}
+.foot-col a:hover { color: var(--ink); }
+.foot-brand .wordmark { margin-bottom: 14px; }
+.foot-brand p { font-size: 13.5px; color: var(--ink-55); line-height: 1.6; max-width: 320px; }
 .foot-bottom {
   border-top: 1px solid var(--line-soft);
-  padding-top: 22px;
+  padding-top: 24px;
   display: flex; align-items: center; justify-content: space-between;
   flex-wrap: wrap; gap: 12px;
-  font-size: 12px; color: var(--text-55);
-}
-.foot-bottom .legal {
-  font-size: 11px;
-}
-
-/* ── INTERACTIVE DEMO ──────────────────────────────────────────────────── */
-#demo-container {
-  position: relative; height: 380px; user-select: none;
-  background: #0a0a0a;
-}
-
-/* menu bar */
-#demo-menubar {
-  height: 32px; background: #000;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 16px; font-size: 13px; color: rgba(255,255,255,0.85);
-}
-#demo-menubar .ml { display: flex; gap: 18px; }
-#demo-menubar .ml span:first-child { font-weight: 600; }
-#demo-menubar .mr { font-variant-numeric: tabular-nums; color: rgba(255,255,255,0.7); }
-
-/* desktop bg */
-#demo-desktop {
-  position: absolute; top: 32px; left: 0; right: 0; bottom: 0;
-  background: #111;
-}
-
-/* notch pill */
-#demo-pill {
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  height: 37px; min-width: 190px; background: #000;
-  border-radius: 0 0 11px 11px;
-  display: flex; align-items: center; justify-content: flex-end;
-  padding: 0 10px; cursor: pointer; z-index: 10;
-  -webkit-tap-highlight-color: transparent;
-}
-.pill-inner {
-  display: flex; align-items: center; gap: 5px;
-  font-family: var(--font-rounded); font-size: 12px; font-weight: 600;
-  font-variant-numeric: tabular-nums; color: #fff;
-}
-.pill-dot {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--orange);
-  flex-shrink: 0;
-}
-.pill-dot.ok { background: var(--green); }
-
-/* attention: glow + arrow nudging the user to hover the pill */
-#demo-pill.nudge { animation: pillGlow 1.8s ease-in-out infinite; }
-@keyframes pillGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255,159,10,0.0); }
-  50%      { box-shadow: 0 6px 22px 2px rgba(255,159,10,0.55); }
-}
-#demo-pill-arrow {
-  position: absolute; top: 48px; left: 50%; transform: translateX(-50%);
-  z-index: 10; color: var(--orange); font-size: 15px; line-height: 1;
-  pointer-events: none; text-shadow: 0 0 10px rgba(255,159,10,0.7);
-  animation: arrowBob 1.4s ease-in-out infinite;
-}
-@keyframes arrowBob {
-  0%, 100% { transform: translateX(-50%) translateY(0);   opacity: 0.55; }
-  50%      { transform: translateX(-50%) translateY(-6px); opacity: 1; }
-}
-
-/* panel */
-#demo-panel {
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 400px; background: #000;
-  border-radius: 0 0 20px 20px;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.75);
-  display: none; flex-direction: column; z-index: 11;
-}
-#demo-panel.open { display: flex; }
-
-.demo-notch-gap { height: 30px; flex: none; background: #000; }
-
-.demo-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 5px 14px; flex: none;
-}
-.demo-header-title { font-size: 12px; font-weight: 600; color: var(--text-primary); }
-.demo-header-right { display: flex; align-items: center; gap: 8px; }
-.demo-badge { font-size: 10px; color: var(--text-60); font-variant-numeric: tabular-nums; }
-.demo-anki-btn {
-  font-size: 12px; color: rgba(255,255,255,0.75);
-  background: none; border: none; padding: 0;
-  font-family: var(--font-system);
-  transition: transform 0.12s ease-out;
-}
-
-.demo-card {
-  flex: 1; padding: 14px 16px; font-size: 17px; line-height: 1.5;
-  color: rgba(255,255,255,0.9);
-  display: flex; align-items: center; justify-content: center;
-  min-height: 110px;
-}
-.demo-card-text { text-align: center; }
-.demo-card .cloze { color: lightblue; font-weight: 600; }
-
-.demo-footer { padding: 6px 10px; flex: none; }
-.demo-show-btn {
-  width: 100%; padding: 6px 12px; border-radius: var(--radius-md);
-  background: var(--fill-strong); border: none;
-  font-family: var(--font-system); font-size: 13px; font-weight: 600;
-  color: var(--text-primary);
-  display: flex; align-items: center; justify-content: space-between;
-  transition: opacity 0.1s ease, transform 0.12s ease-out;
-  min-height: 40px;
-}
-.demo-show-btn:hover { opacity: 0.85; }
-.demo-show-hint { font-size: 11px; color: var(--text-60); }
-
-.demo-grade-bar { display: flex; gap: 6px; padding: 6px 10px; flex: none; }
-.demo-grade-btn {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  gap: 3px; padding: 5px 0; border-radius: var(--radius-md);
-  background: var(--fill-medium); border: none;
-  font-family: var(--font-system); color: var(--text-primary);
-  transition: opacity 0.1s ease, transform 0.12s ease-out;
-  min-height: 44px;
-}
-.demo-grade-btn:hover { opacity: 0.8; }
-.demo-grade-btn.again { background: var(--again-bg); }
-.demo-grade-label { font-size: 13px; font-weight: 600; }
-.demo-grade-ivl   { font-size: 11px; color: var(--text-60); font-variant-numeric: tabular-nums; }
-
-.demo-status {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  justify-content: center; gap: 8px; padding: 20px;
-}
-.demo-status-text   { font-size: 15px; font-weight: 600; color: var(--text-primary); }
-.demo-status-detail { font-size: 13px; color: var(--text-60); }
-.demo-reset-btn {
-  font-size: 12px; color: var(--text-60); background: none; border: none;
-  padding: 0; font-family: var(--font-system);
-  transition: color 0.1s ease, transform 0.12s ease-out;
-  min-height: 36px;
-}
-.demo-reset-btn:hover { color: var(--text-70); }
-
-#demo-hint {
-  position: absolute; bottom: 12px; left: 0; right: 0;
-  text-align: center; font-size: 12px; color: var(--text-55);
-  pointer-events: none;
+  font-family: var(--mono);
+  font-size: 11px; color: var(--ink-40);
 }
 
 /* ── SCROLL REVEAL ─────────────────────────────────────────────────────── */
 .reveal {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(14px);
   transition: opacity 0.7s ease-out, transform 0.7s ease-out;
 }
-.reveal.in {
-  opacity: 1;
-  transform: none;
-}
+.reveal.in { opacity: 1; transform: none; }
 
 /* ── RESPONSIVE ────────────────────────────────────────────────────────── */
-@media (max-width: 860px) {
+@media (max-width: 1180px) {
   .nav-links { display: none; }
-  .nav-cta-slot .btn-primary { display: none; }
   .hamburger { display: inline-flex; }
-  .row, .row.reverse {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
+}
+@media (max-width: 960px) {
+  .nav-cta-slot .btn-primary { display: none; }
+  .mobile-sticky-cta { display: block; }
+  body { padding-bottom: 84px; }
+  .row, .row.reverse { grid-template-columns: 1fr; gap: 36px; }
   .row.reverse > .col-text { order: 0; }
-  .how-grid, .features { grid-template-columns: 1fr; }
-  .foot-grid {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
+  .how-grid { grid-template-columns: 1fr; border-top: none; }
+  .step { border-left: none; border-top: 1px solid var(--line-soft); padding: 30px 0; }
+  .step:first-child { border-top: none; }
+  .features { grid-template-columns: 1fr; }
+  .foot-grid { grid-template-columns: 1fr; gap: 28px; }
 }
 @media (max-width: 720px) {
-  .hero { padding-top: 100px; padding-bottom: 40px; }
-  section { padding: 64px 0; }
-  .wrap { padding: 0 20px; }
-  .nav-inner { padding: 14px 20px; }
-  #demo-panel { width: min(340px, 90vw); }
-  .compare-row {
-    grid-template-columns: 1fr;
-  }
+  .wrap { padding: 0 22px; }
+  .nav-inner { padding: 0 14px; }
+  section { padding: 76px 0; }
+  .hero { padding-top: calc(var(--nav-h) + 52px); }
+  #hero-cta, #price-cta, #closing-cta { min-height: 186px; }
+  #notch { min-width: 138px; height: 32px; }
+  #panel { width: min(92vw, 360px); }
+  .wordmark { font-size: 19px; }
+  .compare-row { grid-template-columns: 1fr; }
   .compare-cell { border-right: none; border-bottom: 1px solid var(--line-soft); }
+  .compare-row .compare-cell:last-child { border-bottom: none; }
   .compare-row.head { display: none; }
-  .compare-cell.label {
-    background: rgba(255,255,255,0.03);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--text-55);
-  }
-  .compare-cell.us::before { content: "FlashNotch: "; color: var(--green); font-weight: 600; }
-  .compare-cell.other::before { content: "Others: "; color: var(--text-55); font-weight: 600; }
-  .price-card { padding: 32px 24px; }
-  .faq-trigger { padding: 18px 18px; font-size: 14px; }
-  .faq-answer { padding: 0 18px 20px; }
+  .compare-cell.us::before { content: "FlashNotch — "; color: var(--green); font-weight: 600; }
+  .compare-cell.other::before { content: "Others — "; color: var(--ink-40); font-weight: 600; }
+  .founder { padding-left: 22px; }
+  .founder::before { font-size: 80px; top: -18px; left: -8px; }
+  .price-card { padding: 40px 24px 36px; }
+  .faq-trigger { gap: 14px; }
+  .faq-answer { padding: 0 42px 26px; }
+  .keys { gap: 16px 18px; }
 }
 
 /* ── REDUCED MOTION ────────────────────────────────────────────────────── */
@@ -947,32 +968,50 @@ footer {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  .reveal { opacity: 1; transform: none; }
-  .nav { transition: none; }
-  #demo-pill.nudge { animation: none; }
-  #demo-pill-arrow { animation: none; opacity: 0.8; }
-  .faq-panel { transition: none; }
-  .faq-icon::after { transition: none; }
-  /* no press-dip when the user has asked for no motion */
-  .btn:active,
-  .hamburger:active,
-  .faq-trigger:active,
-  .demo-show-btn:active,
-  .demo-grade-btn:active,
-  .demo-anki-btn:active,
-  .demo-reset-btn:active { transform: none; }
+  .reveal, .rise { opacity: 1; transform: none; }
+  .ticker { animation: none; }
+  #notch.nudge { animation: none; }
+  .try-notch .up { animation: none; }
+  .btn:active, .hamburger:active, .faq-trigger:active,
+  .panel-show-btn:active, .panel-grade-btn:active,
+  .panel-anki-btn:active, .panel-reset-btn:active { transform: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- ── STICKY NAV ────────────────────────────────────────────────────────── -->
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ══ THE NOTCH — a real one, pinned to your viewport ═══════════════════ -->
+<div id="notch" class="nudge" tabindex="0" role="button"
+     aria-label="FlashNotch demo notch — press Enter to expand the review panel, Space to flip, 1 to 4 to grade, Escape to close">
+  <span class="cam" aria-hidden="true"></span>
+  <div class="pill-inner">
+    <div class="pill-dot" id="pill-dot"></div>
+    <span id="pill-num">3</span>
+  </div>
+</div>
+<div id="panel" role="group" aria-label="FlashNotch review panel demo">
+  <div class="panel-notch-gap"></div>
+  <div class="panel-header">
+    <span class="panel-title" id="panel-title">Pharmacology</span>
+    <div class="panel-right">
+      <span class="panel-badge" id="panel-badge">3 due</span>
+      <button class="panel-anki-btn" id="panel-anki">↗ Anki</button>
+    </div>
+  </div>
+  <div id="panel-body"></div>
+  <div class="panel-keys-hint">space flips · 1–4 grade · esc closes</div>
+</div>
+
+<!-- ── NAV ────────────────────────────────────────────────────────────────── -->
 <nav class="nav" id="nav">
   <div class="nav-inner">
-    <a class="wordmark" href="#top"><span class="dot"></span>FlashNotch</a>
+    <a class="wordmark" href="#top">Flash<em>Notch</em></a>
     <div class="nav-links">
-      <a href="#how">How it works</a>
-      <a href="#brain">Why it's safe</a>
+      <a href="#how">How</a>
+      <a href="#brain">Safety</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
     </div>
@@ -994,78 +1033,77 @@ footer {
   <div class="mobile-cta" id="mobile-cta"></div>
 </div>
 
-<div class="wrap">
+<!-- mobile sticky CTA: only shown ≤960px; hidden by JS while the hero form is on screen -->
+<div class="mobile-sticky-cta" id="mobile-sticky-cta">
+  <div id="mobile-sticky-slot"></div>
+</div>
+
+<div class="wrap" id="main" tabindex="-1">
 
   <!-- ── HERO ───────────────────────────────────────────────────────────── -->
   <header class="hero" id="top">
+    <div class="glow" aria-hidden="true"></div>
     <div class="hero-inner">
-      <span class="pill-badge"><span class="spark">✨</span> Coming to the Mac App Store</span>
-      <h1>Your Anki reps,<br>in the <span class="accent-italic">notch</span>.</h1>
-      <p class="sub">A glanceable due count lives in your MacBook notch. Hover, flip, grade — without leaving what you're doing. Drives your real Anki, so your schedule stays exactly as Anki computes it.</p>
-
-      <div id="hero-cta"></div>
-      <p class="cta-meta">macOS 15+ · drives your real Anki · review-only · no subscription</p>
+      <div class="try-notch rise d1"><span class="up" aria-hidden="true">↑</span> This notch is real — hover it</div>
+      <h1 class="rise d2">Your Anki reps<br>live in the <em>notch</em> now.</h1>
+      <p class="sub rise d3">A glanceable due count sits in your MacBook notch. Hover, flip, grade — without leaving what you're doing. FlashNotch drives your real Anki, so your schedule stays exactly as Anki computes it.</p>
+      <div id="hero-cta" class="rise d4"></div>
+      <p class="cta-meta rise d5">macOS 15+ · drives your real Anki · review-only · no subscription</p>
+      <p class="cta-meta maker-line rise d5">Built by a heavy Anki user who does ~546 reps a day.</p>
     </div>
 
-    <div class="mock-card hero-demo-card reveal">
-      <div id="demo-container">
-        <div id="demo-menubar">
-          <div class="ml">
-            <span>Finder</span><span>File</span><span>Edit</span><span>View</span>
-          </div>
-          <div class="mr">9:41 AM</div>
-        </div>
-        <div id="demo-desktop"></div>
-        <div id="demo-pill" class="nudge">
-          <div class="pill-inner">
-            <div class="pill-dot" id="pill-dot"></div>
-            <span id="pill-num">3</span>
-          </div>
-        </div>
-        <div id="demo-pill-arrow">▲</div>
-        <div id="demo-panel">
-          <div class="demo-notch-gap"></div>
-          <div class="demo-header">
-            <span class="demo-header-title" id="panel-title">Pharmacology</span>
-            <div class="demo-header-right">
-              <span class="demo-badge" id="panel-badge">3 due</span>
-              <button class="demo-anki-btn" id="panel-anki">↗ Anki</button>
-            </div>
-          </div>
-          <div id="panel-body"></div>
-        </div>
-        <div id="demo-hint">Try it — hover the pill</div>
+    <!-- decorative flashcard ticker -->
+    <div class="ticker-wrap rise d5" aria-hidden="true">
+      <div class="ticker" id="ticker">
+        <span class="tick"><span class="q">Beta blockers block</span> <span class="a">β₁ receptors</span> <span class="g">· Good 4d</span></span>
+        <span class="tick"><span class="sep">◆</span></span>
+        <span class="tick"><span class="q">First-line for anaphylaxis</span> <span class="a">IM epinephrine</span> <span class="g">· Easy 8d</span></span>
+        <span class="tick"><span class="sep">◆</span></span>
+        <span class="tick"><span class="q">Warfarin inhibits vitamin</span> <span class="a">K</span> <span class="g">· Good 6d</span></span>
+        <span class="tick"><span class="sep">◆</span></span>
+        <span class="tick"><span class="q">كتاب means</span> <span class="a">book</span> <span class="g">· Good 12d</span></span>
+        <span class="tick"><span class="sep">◆</span></span>
+        <span class="tick"><span class="q">Cranial nerve VII</span> <span class="a">facial nerve</span> <span class="g">· Hard 2d</span></span>
+        <span class="tick"><span class="sep">◆</span></span>
+        <span class="tick"><span class="q">∫ eˣ dx =</span> <span class="a">eˣ + C</span> <span class="g">· Easy 21d</span></span>
+        <span class="tick"><span class="sep">◆</span></span>
       </div>
     </div>
   </header>
 
   <!-- ── HOW IT WORKS ───────────────────────────────────────────────────── -->
   <section id="how">
-    <div class="section-kicker reveal">How it works</div>
-    <h2 class="reveal">Hover. Flip. Grade.</h2>
+    <div class="sec-head reveal">
+      <span class="sec-index">01</span>
+      <span class="sec-kicker">How it works</span>
+    </div>
+    <h2 class="reveal">Hover. Flip. <em>Grade.</em></h2>
     <div class="how-grid">
       <div class="step reveal">
-        <div class="n">01</div>
+        <div class="n">1</div>
         <h3>Glance</h3>
         <p>The pill shows today's due count — limit-adjusted, straight from Anki. A green ✓ means you're caught up.</p>
       </div>
       <div class="step reveal">
-        <div class="n">02</div>
+        <div class="n">2</div>
         <h3>Expand</h3>
         <p>Hover the notch or press ⌘⌥R. The panel drops out with your real card — images, cloze, MathJax and all.</p>
       </div>
       <div class="step reveal">
-        <div class="n">03</div>
+        <div class="n">3</div>
         <h3>Grade</h3>
         <p>Space flips, 1–4 grades, Z undoes. Every answer lands in Anki's scheduler the moment you press it.</p>
       </div>
     </div>
   </section>
 
-  <!-- ── BRAIN / COMPARISON ──────────────────────────────────────────────── -->
+  <!-- ── BRAIN / COMPARISON ─────────────────────────────────────────────── -->
   <section id="brain">
-    <div class="section-kicker reveal">Why it's safe</div>
-    <h2 class="reveal">Anki is the brain.<br>The notch is the face.</h2>
+    <div class="sec-head reveal">
+      <span class="sec-index">02</span>
+      <span class="sec-kicker">Why it's safe</span>
+    </div>
+    <h2 class="reveal">Anki is the brain.<br>The notch is the <em>face.</em></h2>
     <p class="lede reveal">FlashNotch reimplements zero scheduling. It drives Anki's own reviewer over AnkiConnect, so your intervals, daily limits, FSRS and review history stay exactly as Anki computes them.</p>
 
     <div class="compare reveal">
@@ -1077,36 +1115,38 @@ footer {
       <div class="compare-row">
         <div class="compare-cell label">Scheduling</div>
         <div class="compare-cell us"><span class="check">✓</span>Drives Anki's own reviewer</div>
-        <div class="compare-cell"><span class="dash">—</span>Clones decks &amp; re-schedules</div>
+        <div class="compare-cell other"><span class="dash">—</span>Clones decks &amp; re-schedules</div>
       </div>
       <div class="compare-row">
         <div class="compare-cell label">Your data</div>
         <div class="compare-cell us"><span class="check">✓</span>No database, history never drifts</div>
-        <div class="compare-cell"><span class="dash">—</span>Separate DB that can double-count</div>
+        <div class="compare-cell other"><span class="dash">—</span>Separate DB that can double-count</div>
       </div>
       <div class="compare-row">
         <div class="compare-cell label">Scope</div>
         <div class="compare-cell us"><span class="check">✓</span>Review-only, edits stay in Anki</div>
-        <div class="compare-cell"><span class="dash">—</span>Varies</div>
+        <div class="compare-cell other"><span class="dash">—</span>Varies</div>
       </div>
       <div class="compare-row">
         <div class="compare-cell label">Privacy</div>
         <div class="compare-cell us"><span class="check">✓</span>100% local, nothing leaves your Mac</div>
-        <div class="compare-cell"><span class="dash">—</span>Varies</div>
+        <div class="compare-cell other"><span class="dash">—</span>Varies</div>
       </div>
     </div>
 
-    <!-- ── FOUNDER NOTE ─────────────────────────────────────────────────── -->
     <div class="founder reveal">
-      <p>"I'm a practicing physician with about 546 due cards a day. The thing that always broke my streak was the friction of opening the full Anki app for a quick review between patients. I built FlashNotch so I could knock out reps in the notch without context-switching — and without any risk of drifting from Anki's scheduler."</p>
+      <p>I do about 546 due cards a day. The thing that always broke my streak was the friction of opening the full Anki app for a quick review in the middle of something else. I built FlashNotch so I could knock out reps in the notch without context-switching — and without any risk of drifting from Anki's scheduler.</p>
       <div class="sig">— the maker of FlashNotch</div>
     </div>
   </section>
 
-  <!-- ── SHORTCUTS ───────────────────────────────────────────────────────── -->
+  <!-- ── SHORTCUTS ──────────────────────────────────────────────────────── -->
   <section id="keys">
-    <div class="section-kicker reveal">Keyboard-first</div>
-    <h2 class="reveal">Your hands never leave the keys.</h2>
+    <div class="sec-head reveal">
+      <span class="sec-index">03</span>
+      <span class="sec-kicker">Keyboard-first</span>
+    </div>
+    <h2 class="reveal">Your hands never<br>leave the <em>keys.</em></h2>
     <div class="keys reveal">
       <div class="key"><div class="keycap">⌘⌥R</div><span>summon</span></div>
       <div class="key"><div class="keycap">Space</div><span>flip · Good</span></div>
@@ -1120,12 +1160,14 @@ footer {
     </div>
   </section>
 
-  <!-- ── FEATURES (with mockups in alternating rows) ─────────────────────── -->
+  <!-- ── DETAILS (alternating rows) ─────────────────────────────────────── -->
   <section id="features">
-    <div class="section-kicker reveal">Details</div>
-    <h2 class="reveal">Small app. Sharp edges filed off.</h2>
+    <div class="sec-head reveal">
+      <span class="sec-index">04</span>
+      <span class="sec-kicker">Details</span>
+    </div>
+    <h2 class="reveal">Small app.<br>Sharp edges <em>filed off.</em></h2>
 
-    <!-- ROW 1: text-left, mockup-right (light mode panel) -->
     <div class="row">
       <div class="col-text reveal">
         <h3>Follows your Mac — Light, Dark, or System</h3>
@@ -1137,7 +1179,7 @@ footer {
         </ul>
       </div>
       <div class="col-mockup reveal">
-        <div class="mock-card glass">
+        <div class="mock-card">
           <div class="mini">
             <div class="mini-light-label">Same card, light mode</div>
             <div class="mini-light">
@@ -1160,7 +1202,6 @@ footer {
       </div>
     </div>
 
-    <!-- ROW 2: mockup-left, text-right (deck picker) -->
     <div class="row reverse">
       <div class="col-text reveal">
         <h3>Pick a deck. Review its whole subtree.</h3>
@@ -1172,39 +1213,30 @@ footer {
         </ul>
       </div>
       <div class="col-mockup reveal">
-        <div class="mock-card glass">
+        <div class="mock-card">
           <div class="mini">
             <div class="mini-deck-title">Pick a deck</div>
             <div class="mini-deck-row">
               <span class="mini-deck-name">Pharmacology</span>
-              <div class="mini-deck-meta">
-                <span class="mini-deck-due">42</span>
-              </div>
+              <span class="mini-deck-due">42</span>
             </div>
             <div class="mini-deck-row">
               <span class="mini-deck-name">Internal Medicine</span>
-              <div class="mini-deck-meta">
-                <span class="mini-deck-due">318</span>
-              </div>
+              <span class="mini-deck-due">318</span>
             </div>
             <div class="mini-deck-row">
               <span class="mini-deck-name">Pathology</span>
-              <div class="mini-deck-meta">
-                <span class="mini-deck-due">127</span>
-              </div>
+              <span class="mini-deck-due">127</span>
             </div>
             <div class="mini-deck-row">
               <span class="mini-deck-name">Arabic</span>
-              <div class="mini-deck-meta">
-                <span class="mini-deck-due zero">✓</span>
-              </div>
+              <span class="mini-deck-due zero">✓</span>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ROW 3: text-left, mockup-right (caught up) -->
     <div class="row">
       <div class="col-text reveal">
         <h3>Quiet by design.</h3>
@@ -1216,7 +1248,7 @@ footer {
         </ul>
       </div>
       <div class="col-mockup reveal">
-        <div class="mock-card glass">
+        <div class="mock-card">
           <div class="mini">
             <div class="mini-caughtup">
               <div class="check">✓</div>
@@ -1233,32 +1265,41 @@ footer {
     </div>
   </section>
 
-  <!-- ── FEATURES GRID (compact) ────────────────────────────────────────── -->
+  <!-- ── FEATURE GRID ───────────────────────────────────────────────────── -->
   <section id="features-grid">
-    <div class="section-kicker reveal">Details</div>
-    <h2 class="reveal">More, in the margins.</h2>
-    <div class="features">
-      <div class="feature reveal">
+    <div class="sec-head reveal">
+      <span class="sec-index">05</span>
+      <span class="sec-kicker">The small stuff</span>
+    </div>
+    <h2 class="reveal">More, in the <em>margins.</em></h2>
+    <div class="features reveal">
+      <div class="feature">
+        <div class="glyph">⌘</div>
         <h3>Real card rendering</h3>
         <p>Images, audio, cloze, typed answers and MathJax render like they do in Anki — because it's your actual card.</p>
       </div>
-      <div class="feature reveal">
+      <div class="feature">
+        <div class="glyph">◠</div>
         <h3>Hover to expand</h3>
         <p>A 250ms dwell opens the panel; moving away closes it. Or turn it off and use the hotkey only.</p>
       </div>
-      <div class="feature reveal">
+      <div class="feature">
+        <div class="glyph">⤢</div>
         <h3>Zoom &amp; resize</h3>
         <p>⌘+ / ⌘− zooms the card. Drag the corner grip to make the panel yours.</p>
       </div>
-      <div class="feature reveal">
+      <div class="feature">
+        <div class="glyph">↓↑</div>
         <h3>Scroll to review</h3>
         <p>Prefer scrolling? Swipe down to flip, swipe down again for Good. Optional, off-capable.</p>
       </div>
-      <div class="feature reveal">
+      <div class="feature">
+        <div class="glyph">M·E</div>
         <h3>Mark &amp; edit in Anki</h3>
         <p>Press M to mark a card for later, or E to jump straight to it in Anki's editor.</p>
       </div>
-      <div class="feature reveal">
+      <div class="feature">
+        <div class="glyph">−·=</div>
         <h3>Optional bury power-up</h3>
         <p>A bundled companion add-on adds bury (− / =) using Anki's own operation. Strictly optional.</p>
       </div>
@@ -1267,10 +1308,13 @@ footer {
 
   <!-- ── PRICING ────────────────────────────────────────────────────────── -->
   <section id="pricing">
-    <div class="section-kicker reveal">Pricing</div>
-    <h2 class="reveal">One-time. No subscription.</h2>
+    <div class="sec-head reveal">
+      <span class="sec-index">06</span>
+      <span class="sec-kicker">Pricing</span>
+    </div>
+    <h2 class="reveal">One-time. No <em>subscription.</em></h2>
     <div class="price-card reveal">
-      <div class="price">$4.99</div>
+      <div class="price"><sup>$</sup>4.99</div>
       <div class="price-sub">One purchase, yours forever. Updates included.</div>
       <div id="price-cta"></div>
       <div class="price-note">Requires macOS 15 or later. Notch required for the pill; the ⌘⌥R hotkey works on any Mac. Anki and AnkiConnect are free.</div>
@@ -1279,12 +1323,16 @@ footer {
 
   <!-- ── FAQ ────────────────────────────────────────────────────────────── -->
   <section id="faq">
-    <div class="section-kicker reveal">FAQ</div>
+    <div class="sec-head reveal">
+      <span class="sec-index">07</span>
+      <span class="sec-kicker">FAQ</span>
+    </div>
     <h2 class="reveal">Questions</h2>
     <div class="faq-wrap reveal">
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false">
-          <span>Does it touch my scheduling?</span>
+          <span class="faq-num">01</span>
+          <span class="faq-q">Does it touch my scheduling?</span>
           <span class="faq-icon" aria-hidden="true"></span>
         </button>
         <div class="faq-panel">
@@ -1295,7 +1343,8 @@ footer {
       </div>
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false">
-          <span>What do I need installed?</span>
+          <span class="faq-num">02</span>
+          <span class="faq-q">What do I need installed?</span>
           <span class="faq-icon" aria-hidden="true"></span>
         </button>
         <div class="faq-panel">
@@ -1306,7 +1355,8 @@ footer {
       </div>
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false">
-          <span>My Mac doesn't have a notch. Can I still use it?</span>
+          <span class="faq-num">03</span>
+          <span class="faq-q">My Mac doesn't have a notch. Can I still use it?</span>
           <span class="faq-icon" aria-hidden="true"></span>
         </button>
         <div class="faq-panel">
@@ -1317,7 +1367,8 @@ footer {
       </div>
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false">
-          <span>Do images and audio work?</span>
+          <span class="faq-num">04</span>
+          <span class="faq-q">Do images and audio work?</span>
           <span class="faq-icon" aria-hidden="true"></span>
         </button>
         <div class="faq-panel">
@@ -1328,7 +1379,8 @@ footer {
       </div>
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false">
-          <span>Can I create or edit cards?</span>
+          <span class="faq-num">05</span>
+          <span class="faq-q">Can I create or edit cards?</span>
           <span class="faq-icon" aria-hidden="true"></span>
         </button>
         <div class="faq-panel">
@@ -1339,7 +1391,8 @@ footer {
       </div>
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false">
-          <span>Does it collect any data?</span>
+          <span class="faq-num">06</span>
+          <span class="faq-q">Does it collect any data?</span>
           <span class="faq-icon" aria-hidden="true"></span>
         </button>
         <div class="faq-panel">
@@ -1350,35 +1403,36 @@ footer {
       </div>
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false">
-          <span>When can I buy it?</span>
+          <span class="faq-num">07</span>
+          <span class="faq-q">When can I buy it?</span>
           <span class="faq-icon" aria-hidden="true"></span>
         </button>
         <div class="faq-panel">
           <div class="faq-panel-inner">
-            <div class="faq-answer">FlashNotch is coming soon to the Mac App Store as a one-time $4.99 purchase. Join the waitlist above and we'll email you once, the day it launches — no spam, no account required.</div>
+            <div class="faq-answer">FlashNotch is coming soon to the Mac App Store as a one-time purchase. Waitlist members get a founding price — $3.99 launch week, then $4.99. No subscription, ever. Join the waitlist above and we'll email you once, the day it launches — no spam, no account required.</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── CLOSING CTA ─────────────────────────────────────────────────────── -->
+  <!-- ── CLOSING CTA ────────────────────────────────────────────────────── -->
   <section class="closing-cta">
-    <h2 class="reveal">Ready when <span class="accent-italic">you</span> are.</h2>
-    <p class="sub reveal">Join the waitlist and get emailed the day FlashNotch launches on the Mac App Store.</p>
+    <h2 class="reveal">Ready when <em>you</em> are.</h2>
+    <p class="sub reveal">Join the waitlist for the founding price — $3.99 launch week, then $4.99 — and get emailed the day FlashNotch launches on the Mac App Store.</p>
     <div class="reveal" id="closing-cta"></div>
-    <p class="risk-line reveal">Free Anki &amp; AnkiConnect · one-time purchase at launch · no account ever</p>
+    <p class="risk-line reveal">Free Anki &amp; AnkiConnect · one-time purchase, no subscription ever · no account ever</p>
   </section>
 
 </div><!-- .wrap -->
 
-<!-- ── FOOTER ────────────────────────────────────────────────────────────── -->
+<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
 <footer>
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-col foot-brand">
-        <a class="wordmark" href="#top"><span class="dot"></span>FlashNotch</a>
-        <p>A native macOS notch study companion for Anki. Review-only, no database, no drift. Made by a practicing physician.</p>
+        <a class="wordmark" href="#top">Flash<em>Notch</em></a>
+        <p>A native macOS notch study companion for Anki. Review-only, no database, no drift.</p>
       </div>
       <div class="foot-col">
         <h4>Product</h4>
@@ -1395,33 +1449,40 @@ footer {
     </div>
     <div class="foot-bottom">
       <span>© <span id="year"></span> FlashNotch. All rights reserved.</span>
-      <span class="legal">Not affiliated with Anki or AnkiWeb. Anki is a trademark of its respective owners.</span>
+      <span>Not affiliated with Anki or AnkiWeb. Anki is a trademark of its respective owners.</span>
     </div>
   </div>
 </footer>
 
-<!-- ── SCRIPT ────────────────────────────────────────────────────────────── -->
+<!-- ── SCRIPT ─────────────────────────────────────────────────────────────── -->
 <script>
 /* ══════════════════════════════════════════════════════════════════════
    LAUNCH CONFIG — one switch to flip at launch.
-   - live: false  → every CTA renders the email waitlist ("Notify me at launch")
+   - live: false  → every CTA renders the email waitlist ("Email me at launch")
    - live: true   → every CTA renders "Download on the Mac App Store" → appStoreUrl
    ══════════════════════════════════════════════════════════════════════ */
 const LAUNCH = {
   live: false,
   appStoreUrl: "",
-  formEndpoint: "REPLACE_WITH_FORM_URL"  // e.g. https://formspree.io/f/xxxx or Buttondown
+  // Paste your Formspree endpoint here to go live: https://formspree.io/f/XXXXXXXX
+  // While this stays on the sentinel, the form gracefully falls back to a mailto.
+  // No JS change needed once a real URL is set — the fetch below already matches
+  // Formspree's AJAX contract (JSON POST + Accept: application/json + res.ok check).
+  formEndpoint: "REPLACE_WITH_FORM_URL"
 };
 
+/* Founding-price hook — single source of truth, reused in the waitlist meta copy. */
+const FOUNDING_HOOK = "$3.99 launch week for waitlist members — then $4.99. No subscription, ever.";
+
 /* ── CTA RENDERING ─────────────────────────────────────────────────────── */
-/* nav + mobile-menu are tight slots: a full email form would crowd them (and
-   the submit button is hidden on mobile), so they get a compact button that
-   jumps to the hero form. hero/price/closing carry the actual inline form.
-   In live mode every slot becomes the same App Store download button. */
-const COMPACT_SLOTS = ['nav-cta-slot', 'mobile-cta'];
+/* nav + mobile-menu are tight slots: a full email form would crowd them, so
+   they get a compact button that jumps to the hero form. hero/price/closing
+   carry the actual inline form. In live mode every slot becomes the same
+   App Store download button. */
+const COMPACT_SLOTS = ['nav-cta-slot', 'mobile-cta', 'mobile-sticky-slot'];
 
 function renderCTAs() {
-  const slotIds = ['nav-cta-slot', 'hero-cta', 'mobile-cta', 'price-cta', 'closing-cta'];
+  const slotIds = ['nav-cta-slot', 'hero-cta', 'mobile-cta', 'price-cta', 'closing-cta', 'mobile-sticky-slot'];
 
   slotIds.forEach(function (id) {
     const slot = document.getElementById(id);
@@ -1450,13 +1511,12 @@ function makeWaitlistButton() {
   const a = document.createElement('a');
   a.className = 'btn btn-primary';
   a.href = '#top';
-  a.textContent = 'Join waitlist';
+  a.textContent = 'Get on the list';
   a.addEventListener('click', function () {
     const menu = document.getElementById('mobile-menu');
     if (menu) menu.classList.remove('open');
     const burger = document.getElementById('hamburger');
     if (burger) burger.setAttribute('aria-expanded', 'false');
-    // focus the email field after the scroll settles (instant under reduced motion)
     setTimeout(function () {
       const input = document.querySelector('#hero-cta input[type="email"]');
       if (input) input.focus({ preventScroll: true });
@@ -1474,14 +1534,17 @@ function makeWaitlist() {
 
   const input = document.createElement('input');
   input.type = 'email';
+  input.name = 'email';
   input.placeholder = 'you@example.com';
   input.required = true;
+  input.autocomplete = 'email';
+  input.setAttribute('inputmode', 'email');
   input.setAttribute('aria-label', 'Email address');
 
   const btn = document.createElement('button');
   btn.type = 'submit';
   btn.className = 'btn btn-primary';
-  btn.textContent = 'Notify me at launch';
+  btn.textContent = 'Email me at launch →';
 
   row.appendChild(input);
   row.appendChild(btn);
@@ -1493,7 +1556,8 @@ function makeWaitlist() {
 
   const meta = document.createElement('div');
   meta.className = 'waitlist-meta';
-  meta.textContent = 'One email, at launch. No spam, no account.';
+  // FOUNDING_HOOK is a fixed app-controlled string (no user input) → safe innerHTML.
+  meta.innerHTML = FOUNDING_HOOK + '<br>One email, at launch · no spam · no account.';
 
   wrap.appendChild(row);
   wrap.appendChild(msg);
@@ -1502,6 +1566,20 @@ function makeWaitlist() {
   function setMsg(text, kind) {
     msg.textContent = text;
     msg.className = 'waitlist-msg' + (kind ? ' ' + kind : '');
+  }
+
+  /* Optional, honest share nudge shown after a successful signup (no counters). */
+  function showShareNudge() {
+    if (wrap.querySelector('.waitlist-share')) return;
+    const share = document.createElement('div');
+    share.className = 'waitlist-share';
+    const link = document.createElement('a');
+    link.href = 'mailto:?subject=' + encodeURIComponent('FlashNotch — Anki reps in your MacBook notch') +
+      '&body=' + encodeURIComponent('Thought of you — Anki reviews from the MacBook notch, drives your real Anki: https://mtdinc.github.io/flashnotch-website/');
+    link.textContent = 'Send them FlashNotch';
+    share.appendChild(document.createTextNode('Know someone drowning in their Anki queue? '));
+    share.appendChild(link);
+    wrap.appendChild(share);
   }
 
   async function submit(e) {
@@ -1540,10 +1618,11 @@ function makeWaitlist() {
       setMsg("You're on the list — we'll email you once, at launch.", 'success');
       input.value = '';
       btn.textContent = '✓ On the list';
+      showShareNudge();
     } catch (err) {
       setMsg('Something went wrong. Please try again, or email support@minutebank.app.', 'error');
       btn.disabled = false;
-      btn.textContent = 'Notify me at launch';
+      btn.textContent = 'Email me at launch →';
     }
   }
 
@@ -1599,7 +1678,6 @@ window.scrollTo(0, 0);
     const trigger = item.querySelector('.faq-trigger');
     trigger.addEventListener('click', function () {
       const open = item.classList.contains('open');
-      // close all (one open at a time keeps it clean)
       items.forEach(function (i) {
         i.classList.remove('open');
         i.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
@@ -1633,14 +1711,40 @@ window.scrollTo(0, 0);
   });
 })();
 
+/* ── TICKER: duplicate content once so translateX(-50%) loops seamlessly ── */
+(function () {
+  const t = document.getElementById('ticker');
+  if (t) t.innerHTML = t.innerHTML + t.innerHTML;
+})();
+
 /* ── FOOTER YEAR ───────────────────────────────────────────────────────── */
 document.getElementById('year').textContent = new Date().getFullYear();
 
 /* ── RENDER CTAS ───────────────────────────────────────────────────────── */
 renderCTAs();
 
+/* ── MOBILE STICKY CTA VISIBILITY ──────────────────────────────────────── */
+(function () {
+  const bar = document.getElementById('mobile-sticky-cta');
+  const heroCta = document.getElementById('hero-cta');
+  if (!bar || !heroCta) return;
+  if (!('IntersectionObserver' in window)) return;
+
+  bar.classList.add('is-hidden');
+
+  const obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) bar.classList.add('is-hidden');
+      else bar.classList.remove('is-hidden');
+    });
+  }, { rootMargin: '-72px 0px 0px 0px', threshold: 0 });
+  obs.observe(heroCta);
+})();
+
 /* ══════════════════════════════════════════════════════════════════════
-   INTERACTIVE DEMO — kept from the original, with touch fallback.
+   THE LIVE NOTCH — the page's own notch IS the demo. Hover to expand,
+   Space flips, 1–4 grade, Esc closes. Keyboard never fires while the
+   visitor is typing in a form field.
    ══════════════════════════════════════════════════════════════════════ */
 (function () {
   var CARDS = [
@@ -1662,42 +1766,32 @@ renderCTAs();
   ];
   var LABELS = ['Again', 'Hard', 'Good', 'Easy'];
 
-  var expanded   = false;
-  var idx        = 0;
-  var showAnswer = false;
-  var reviewed   = 0;
-  var armed      = false;
+  var expanded    = false;
+  var idx         = 0;
+  var showAnswer  = false;
+  var reviewed    = 0;
   var hasExpanded = false;
   var pillTimer, panelTimer;
 
-  var $pill  = document.getElementById('demo-pill');
-  var $panel = document.getElementById('demo-panel');
+  var $notch = document.getElementById('notch');
+  var $panel = document.getElementById('panel');
   var $body  = document.getElementById('panel-body');
   var $title = document.getElementById('panel-title');
   var $badge = document.getElementById('panel-badge');
   var $anki  = document.getElementById('panel-anki');
   var $dot   = document.getElementById('pill-dot');
   var $num   = document.getElementById('pill-num');
-  var $hint  = document.getElementById('demo-hint');
-  var $arrow = document.getElementById('demo-pill-arrow');
-  var $demo  = document.getElementById('demo-container');
 
   function due()  { return CARDS.length - reviewed; }
   function done() { return reviewed >= CARDS.length; }
   function card() { return CARDS[idx % CARDS.length]; }
 
   function render() {
-    $dot.className  = 'pill-dot' + (done() ? ' ok' : '');
+    $dot.className   = 'pill-dot' + (done() ? ' ok' : '');
     $num.textContent = done() ? '✓' : due();
 
-    $pill.style.display  = expanded ? 'none' : 'flex';
-    $panel.className     = expanded ? 'open'  : '';
-    $arrow.style.display = (expanded || hasExpanded) ? 'none' : 'block';
-    if (hasExpanded) $pill.classList.remove('nudge');
-
-    $hint.textContent = expanded
-      ? 'Space flips · 1–4 grade · Esc closes'
-      : 'Try it — hover or tap the pill';
+    $panel.className = expanded ? 'open' : '';
+    if (hasExpanded) $notch.classList.remove('nudge');
 
     if (!expanded) return;
 
@@ -1707,10 +1801,10 @@ renderCTAs();
 
     if (done()) {
       $body.innerHTML =
-        '<div class="demo-status">' +
-          '<div class="demo-status-text">Caught up ✓</div>' +
-          '<div class="demo-status-detail">' + reviewed + ' this session</div>' +
-          '<button class="demo-reset-btn" id="reset-btn">Reset demo</button>' +
+        '<div class="panel-status">' +
+          '<div class="panel-status-text">Caught up ✓</div>' +
+          '<div class="panel-status-detail">' + reviewed + ' this session</div>' +
+          '<button class="panel-reset-btn" id="reset-btn">Reset demo</button>' +
         '</div>';
       document.getElementById('reset-btn').addEventListener('click', function () {
         reviewed = 0; idx = 0; showAnswer = false; render();
@@ -1718,26 +1812,26 @@ renderCTAs();
     } else if (showAnswer) {
       var c = card();
       $body.innerHTML =
-        '<div class="demo-card"><span class="demo-card-text">' + c.a + '</span></div>' +
-        '<div class="demo-grade-bar">' +
+        '<div class="panel-card"><span>' + c.a + '</span></div>' +
+        '<div class="panel-grade-bar">' +
           LABELS.map(function (l, i) {
-            return '<button class="demo-grade-btn' + (i === 0 ? ' again' : '') + '">' +
-              '<span class="demo-grade-label">' + l + '</span>' +
-              '<span class="demo-grade-ivl">' + c.next[i] + '</span>' +
+            return '<button class="panel-grade-btn' + (i === 0 ? ' again' : '') + '">' +
+              '<span class="panel-grade-label">' + l + '</span>' +
+              '<span class="panel-grade-ivl">' + c.next[i] + '</span>' +
             '</button>';
           }).join('') +
         '</div>';
-      Array.from($body.querySelectorAll('.demo-grade-btn')).forEach(function (b) {
+      Array.from($body.querySelectorAll('.panel-grade-btn')).forEach(function (b) {
         b.addEventListener('click', grade);
       });
     } else {
       var c2 = card();
       $body.innerHTML =
-        '<div class="demo-card"><span class="demo-card-text">' + c2.q + '</span></div>' +
-        '<div class="demo-footer">' +
-          '<button class="demo-show-btn" id="show-btn">' +
+        '<div class="panel-card"><span>' + c2.q + '</span></div>' +
+        '<div class="panel-footer">' +
+          '<button class="panel-show-btn" id="show-btn">' +
             '<span>Show Answer</span>' +
-            '<span class="demo-show-hint">Space</span>' +
+            '<span class="panel-show-hint">space</span>' +
           '</button>' +
         '</div>';
       document.getElementById('show-btn').addEventListener('click', flip);
@@ -1749,47 +1843,48 @@ renderCTAs();
   function flip()     { if (!done()) { showAnswer = true; render(); } }
   function grade()    { if (!done()) { reviewed++; idx++; showAnswer = false; render(); } }
 
-  /* pill hover (desktop) */
-  $pill.addEventListener('mouseenter', function () {
+  /* notch hover (desktop) — 250ms dwell, like the real app */
+  $notch.addEventListener('mouseenter', function () {
     clearTimeout(panelTimer);
     pillTimer = setTimeout(expand, 250);
   });
-  $pill.addEventListener('mouseleave', function () { clearTimeout(pillTimer); });
+  $notch.addEventListener('mouseleave', function () { clearTimeout(pillTimer); });
 
-  /* pill tap (touch + click) */
-  $pill.addEventListener('click', function (e) {
+  /* notch tap / click / keyboard-activate */
+  $notch.addEventListener('click', function (e) {
     e.preventDefault();
     if (!expanded) expand();
   });
-
-  /* panel hover (desktop) */
-  $panel.addEventListener('mouseenter', function () { clearTimeout(panelTimer); });
-  $panel.addEventListener('mouseleave', function () {
-    panelTimer = setTimeout(collapse, 450);
+  $notch.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); expand(); }
   });
 
-  /* tap outside panel to close (touch) */
-  /* composedPath() includes nodes removed during re-render, so a grade-button
-     click that replaces innerHTML is still detected as "inside the demo". */
+  /* panel hover (desktop): moving away closes after a grace period */
+  $panel.addEventListener('mouseenter', function () { clearTimeout(panelTimer); });
+  $panel.addEventListener('mouseleave', function () {
+    panelTimer = setTimeout(collapse, 600);
+  });
+
+  /* tap/click outside the panel closes it.
+     composedPath() includes nodes removed during re-render, so a grade-button
+     click that replaces innerHTML is still detected as "inside the panel". */
   document.addEventListener('click', function (e) {
     if (!expanded) return;
     var path = e.composedPath ? e.composedPath() : [e.target];
     for (var i = 0; i < path.length; i++) {
-      if (path[i] === $demo) return;
+      if (path[i] === $panel || path[i] === $notch) return;
     }
     collapse();
   });
 
-  /* keyboard (only while mouse is inside the demo shell) */
-  $demo.addEventListener('mouseenter', function () { armed = true; });
-  $demo.addEventListener('mouseleave', function () {
-    armed = false;
-    clearTimeout(pillTimer);
-    clearTimeout(panelTimer);
-  });
-
+  /* review keys work anywhere on the page while the panel is open —
+     except when the visitor is typing in a field */
   window.addEventListener('keydown', function (e) {
-    if (!armed || !expanded) return;
+    if (!expanded) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+
     if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
       if (!showAnswer) flip(); else grade();
