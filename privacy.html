@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Privacy Policy — FlashNotch</title>
+<title>Privacy Policy · FlashNotch</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -94,21 +94,21 @@ footer a:hover { color: var(--text-70); }
 
   <main>
     <h1>Privacy Policy</h1>
-    <p class="meta">Effective date: June 2026</p>
+    <p class="meta">Effective date: September 2026</p>
 
     <div class="callout">
       <p>FlashNotch collects no personal data. Nothing leaves your Mac.</p>
     </div>
 
     <h2>What FlashNotch does</h2>
-    <p>FlashNotch is a macOS menu-bar app that connects to Anki running locally on your Mac over a loopback HTTP connection (localhost:8765, via the free AnkiConnect add-on). It reads your due cards, displays them in a notch panel, and sends your grade responses back to Anki. That is the entirety of its network activity — and because it uses the loopback address, the connection never leaves your machine.</p>
+    <p>FlashNotch is a macOS menu-bar app that connects to Anki running locally on your Mac over a loopback HTTP connection (127.0.0.1:8765, through the free AnkiConnect add-on, and 127.0.0.1:8766 if you install the optional FlashNotch Bridge add-on). It reads your due cards, shows them in a panel under the notch or in a floating bar, and sends your grades back to Anki. That is the entirety of its network activity, and because it uses the loopback address, the connection never leaves your machine.</p>
 
     <h2>Data we collect</h2>
     <p>None. FlashNotch does not collect, transmit, store on any server, or share any personal information whatsoever. Specifically:</p>
     <ul>
       <li>No account or registration is required.</li>
       <li>No analytics, crash reporters, or tracking SDKs are included or linked.</li>
-      <li>No data is sent to any remote server — ours or anyone else's.</li>
+      <li>No data is sent to any remote server, ours or anyone else's.</li>
       <li>No identifiers (device ID, advertising ID, IP address, or email) are collected.</li>
       <li>No usage statistics or telemetry of any kind are gathered.</li>
     </ul>
@@ -116,13 +116,13 @@ footer a:hover { color: var(--text-70); }
     <h2>Data stored locally on your Mac</h2>
     <p>FlashNotch stores a small amount of data locally using standard macOS mechanisms (UserDefaults and a security-scoped bookmark). This data never leaves your Mac and is deleted when you uninstall the app:</p>
     <ul>
-      <li><strong>Anki media folder bookmark</strong> — a security-scoped reference to your Anki media folder, so the app can display card images and other media files you've already added to Anki.</li>
-      <li><strong>App preferences</strong> — your chosen theme (light/dark/system), panel size, zoom level, global hotkey, hover setting, and other UI preferences.</li>
+      <li><strong>Anki media folder bookmark:</strong> a security-scoped reference to your Anki media folder, so the app can display card images and other media files you've already added to Anki.</li>
+      <li><strong>App preferences:</strong> your chosen theme (light/dark/system), panel size, zoom level, global hotkey, hover setting, and other UI preferences.</li>
     </ul>
     <p>No card content, review history, deck names, or any Anki data is stored by FlashNotch. That data lives in Anki's own files on your Mac.</p>
 
     <h2>Anki and AnkiWeb</h2>
-    <p>FlashNotch communicates only with Anki running on your own computer via localhost (127.0.0.1:8765). It does not communicate with AnkiWeb, Ankitects, or any external service. Your Anki collection, card content, and review history remain entirely subject to <a href="https://ankiweb.net/privacy" target="_blank" rel="noopener">Anki's and AnkiWeb's own privacy policy</a>.</p>
+    <p>FlashNotch communicates only with Anki running on your own computer via localhost. It does not communicate with AnkiWeb, Ankitects, or any external service. When you choose Sync with AnkiWeb, FlashNotch asks Anki to run its own sync: Anki makes that connection with your AnkiWeb account, and FlashNotch never sees your AnkiWeb login. Your Anki collection, card content, and review history remain entirely subject to <a href="https://ankiweb.net/privacy" target="_blank" rel="noopener">Anki's and AnkiWeb's own privacy policy</a>.</p>
 
     <h2>Mac App Store</h2>
     <p>FlashNotch is distributed through the Mac App Store. Apple may collect information related to your purchase and download as described in <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple's Privacy Policy</a>. We have no access to that data.</p>

@@ -3,40 +3,45 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FlashNotch — Anki reps in your MacBook notch</title>
-<meta name="description" content="A glanceable due count lives in your MacBook notch. Hover, flip, grade — without leaving what you're doing. Drives your real Anki; no database, no drift. Coming to the Mac App Store.">
+<title>FlashNotch · Anki reviews in your MacBook notch</title>
+<meta name="description" content="Review your Anki cards from the MacBook notch, or a floating bar on any Mac. Flip and grade in seconds. FlashNotch drives your real Anki, so your schedule and history never drift. One-time purchase on the Mac App Store.">
+<link rel="canonical" href="https://mtdinc.github.io/flashnotch-website/">
+<meta name="theme-color" content="#111013">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta property="og:title" content="FlashNotch — Anki reps in your MacBook notch">
-<meta property="og:description" content="Review your Anki cards from the MacBook notch. Hover to expand, grade with the keyboard, close. Drives your real Anki — no database, no drift. Coming soon to the Mac App Store.">
+<meta property="og:title" content="FlashNotch · Anki reviews in your MacBook notch">
+<meta property="og:description" content="Review your Anki cards from the MacBook notch. Hover, flip, grade, done. FlashNotch drives your real Anki, so nothing ever drifts.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mtdinc.github.io/flashnotch-website/">
 <meta property="og:image" content="https://mtdinc.github.io/flashnotch-website/og-image.png">
-<meta property="og:image:width" content="600">
-<meta property="og:image:height" content="600">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="FlashNotch — Anki reps in your MacBook notch">
-<meta name="twitter:description" content="Review your Anki cards from the MacBook notch. Drives your real Anki — no database, no drift. Coming soon to the Mac App Store.">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The FlashNotch review panel dropping out of a MacBook notch">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FlashNotch · Anki reviews in your MacBook notch">
+<meta name="twitter:description" content="Review your Anki cards from the MacBook notch. FlashNotch drives your real Anki, so nothing ever drifts.">
 <meta name="twitter:image" content="https://mtdinc.github.io/flashnotch-website/og-image.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "FlashNotch",
-  "operatingSystem": "macOS 15+",
-  "applicationCategory": "EducationApplication",
-  "description": "A native macOS menu-bar / notch study companion for Anki. Review your real Anki cards from a panel that drops out of the MacBook notch. Drives Anki's own reviewer — no database, no scheduling drift.",
+  "operatingSystem": "macOS 15.0 or later",
+  "applicationCategory": "EducationalApplication",
+  "url": "https://mtdinc.github.io/flashnotch-website/",
+  "image": "https://mtdinc.github.io/flashnotch-website/og-image.png",
+  "description": "A native macOS study companion for Anki. Review your real Anki cards from a panel that drops out of the MacBook notch, or a floating bar on any Mac. FlashNotch drives Anki's own reviewer, so there is no second database and no scheduling drift.",
   "offers": {
     "@type": "Offer",
     "price": "4.99",
     "priceCurrency": "USD"
   },
   "featureList": [
-    "Due count in the MacBook notch",
-    "Hover or ⌘⌥R to expand the review panel",
+    "Due count in the MacBook notch, or a floating bar on any Mac",
+    "Hover or press Option-Command-R to open the review panel",
     "Drives Anki's own reviewer over AnkiConnect",
-    "Review-only — card creation stays in Anki",
-    "Light/Dark/System themes",
+    "Review-only: card creation stays in Anki",
+    "Light, Dark and System themes",
     "Real card rendering: images, audio, cloze, MathJax"
   ]
 }
@@ -85,7 +90,7 @@
 
 /* ── RESET ─────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { background: var(--bg); scroll-behavior: smooth; }
+html { background: var(--bg); scroll-behavior: smooth; overflow-x: clip; }
 body {
   background: var(--bg);
   color: var(--ink);
@@ -338,6 +343,7 @@ img, svg { display: block; max-width: 100%; }
 /* ── HERO ──────────────────────────────────────────────────────────────── */
 .hero {
   position: relative;
+  overflow-x: clip;
   padding-top: calc(var(--nav-h) + 74px);
   padding-bottom: 40px;
   text-align: center;
@@ -393,46 +399,66 @@ h1 em { font-style: italic; color: var(--amber); letter-spacing: 0; }
 .rise.d5 { animation-delay: 0.5s; }
 @keyframes rise { to { opacity: 1; transform: none; } }
 
-/* ── WAITLIST FORM ─────────────────────────────────────────────────────── */
-.waitlist {
-  display: flex; flex-direction: column; align-items: stretch; gap: 8px;
-  width: 100%; max-width: 440px; margin: 34px auto 0;
+/* ── CALL TO ACTION ────────────────────────────────────────────────────── */
+.cta { display: flex; flex-direction: column; align-items: center; gap: 14px; margin: 34px auto 0; }
+.soon-pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-70); padding: 8px 16px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--fill);
 }
-.waitlist-row { display: flex; gap: 8px; align-items: stretch; }
-.waitlist input[type="email"] {
-  flex: 1;
-  padding: 12px 20px;
-  border-radius: 999px;
-  background: var(--fill);
-  border: 1px solid var(--line);
-  color: var(--ink); font-size: 14px; font-family: inherit;
-  min-height: 46px;
-  transition: border-color 0.15s, background 0.15s;
+.soon-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--amber);
+  box-shadow: 0 0 0 4px rgba(255,179,64,0.16);
 }
-.waitlist input[type="email"]::placeholder { color: var(--ink-40); }
-.waitlist input[type="email"]:focus {
-  outline: none;
-  border-color: var(--amber);
-  background: rgba(255,179,64,0.06);
-}
-.waitlist .btn-primary { flex-shrink: 0; }
-.waitlist-msg {
-  font-size: 13px; color: var(--ink-70);
-  text-align: left; min-height: 18px; margin-top: 2px;
-}
-.waitlist-msg.success { color: var(--green); }
-.waitlist-msg.error   { color: var(--amber); }
-.waitlist-meta {
-  font-family: var(--mono);
-  font-size: 11px; line-height: 1.7; color: var(--ink-40); margin-top: 2px;
-  text-align: left;
-}
-.waitlist a.mailto-fallback,
-.waitlist-share a { color: var(--amber); text-decoration: underline; text-underline-offset: 2px; }
-.waitlist-share { font-size: 12px; color: var(--ink-55); margin-top: 8px; text-align: left; }
+.store-badge { display: inline-block; border-radius: 12px; transition: transform 0.12s ease-out, filter 0.15s ease; }
+.store-badge img { height: 54px; width: auto; }
+.store-badge:hover { filter: brightness(1.2); }
+.store-badge:active { transform: scale(0.97); }
+.cta-note { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.03em; color: var(--ink-55); }
 
 /* anti-CLS reserve for the JS-rendered CTA slots */
-#hero-cta, #price-cta, #closing-cta { display: flow-root; min-height: 158px; }
+#hero-cta, #price-cta, #closing-cta { display: flow-root; min-height: 130px; }
+
+/* ── PRODUCT SHOTS (real captures of the app) ──────────────────────────── */
+.hero-shot { position: relative; max-width: 1080px; margin: 60px auto 0; }
+.hero-shot::before {
+  content: ""; position: absolute; inset: 14% 12% -6%; z-index: -1;
+  background: radial-gradient(closest-side, rgba(255,179,64,0.16), transparent);
+  filter: blur(34px);
+}
+.hero-shot img, .shot-wide img, .shot {
+  width: 100%; height: auto; border-radius: 20px; background: var(--bg-raise);
+  box-shadow: 0 40px 110px rgba(0,0,0,0.55), 0 0 0 1px var(--line-soft);
+}
+.hero-shot figcaption {
+  margin-top: 18px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.03em; color: var(--ink-55);
+}
+.shot-wide { margin: 44px 0 12px; }
+.shot-wide img { aspect-ratio: 1600 / 300; object-fit: cover; object-position: 50% 0; }
+.shot { aspect-ratio: 1.12; object-fit: cover; object-position: 50% 0; }
+/* On phones the full desktop scene makes the panel tiny: crop to the panel instead. */
+@media (max-width: 640px) {
+  .hero-shot img { aspect-ratio: 1.05; object-fit: cover; object-position: 50% 0; }
+  .hero-shot { margin-top: 44px; }
+}
+
+/* ── SUPPORT ───────────────────────────────────────────────────────────── */
+.support-grid { display: grid; grid-template-columns: 1fr 1.45fr; gap: 20px; margin-top: 48px; align-items: start; }
+.support-card { border: 1px solid var(--line); border-radius: 20px; padding: 28px 30px; background: var(--fill); }
+.support-card h3 { font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1.15; margin-bottom: 14px; }
+.support-card p { color: var(--ink-70); font-size: 15px; line-height: 1.65; text-wrap: pretty; }
+.support-mail { color: var(--amber); text-decoration: underline; text-underline-offset: 3px; }
+.support-list { list-style: none; display: grid; gap: 14px; }
+.support-list li { position: relative; padding-left: 18px; color: var(--ink-70); font-size: 14.5px; line-height: 1.55; }
+.support-list li::before {
+  content: ""; position: absolute; left: 0; top: 0.6em; width: 6px; height: 6px; border-radius: 50%; background: var(--amber);
+}
+.support-list strong { display: block; color: var(--ink); font-weight: 600; }
+@media (max-width: 860px) {
+  .support-grid { grid-template-columns: 1fr; }
+  .support-card { padding: 24px 22px; }
+}
 
 /* ── MOBILE STICKY CTA ─────────────────────────────────────────────────── */
 .mobile-sticky-cta {
@@ -805,8 +831,6 @@ h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; color: var(--in
   font-family: var(--mono);
   font-size: 11px; line-height: 1.7; color: var(--ink-40); margin-top: 26px;
 }
-.price-card .waitlist { margin-top: 30px; }
-.price-card .waitlist-meta, .price-card .waitlist-msg { text-align: left; }
 
 /* ── FAQ ───────────────────────────────────────────────────────────────── */
 .faq-wrap { margin-top: 56px; border-top: 1px solid var(--line); }
@@ -950,8 +974,8 @@ footer {
   .compare-cell { border-right: none; border-bottom: 1px solid var(--line-soft); }
   .compare-row .compare-cell:last-child { border-bottom: none; }
   .compare-row.head { display: none; }
-  .compare-cell.us::before { content: "FlashNotch — "; color: var(--green); font-weight: 600; }
-  .compare-cell.other::before { content: "Others — "; color: var(--ink-40); font-weight: 600; }
+  .compare-cell.us::before { content: "FlashNotch: "; color: var(--green); font-weight: 600; }
+  .compare-cell.other::before { content: "Others: "; color: var(--ink-40); font-weight: 600; }
   .founder { padding-left: 22px; }
   .founder::before { font-size: 80px; top: -18px; left: -8px; }
   .price-card { padding: 40px 24px 36px; }
@@ -985,7 +1009,7 @@ footer {
 
 <!-- ══ THE NOTCH — a real one, pinned to your viewport ═══════════════════ -->
 <div id="notch" class="nudge" tabindex="0" role="button"
-     aria-label="FlashNotch demo notch — press Enter to expand the review panel, Space to flip, 1 to 4 to grade, Escape to close">
+     aria-label="FlashNotch demo notch. Press Enter to expand the review panel, Space to flip, 1 to 4 to grade, Escape to close.">
   <span class="cam" aria-hidden="true"></span>
   <div class="pill-inner">
     <div class="pill-dot" id="pill-dot"></div>
@@ -998,7 +1022,7 @@ footer {
     <span class="panel-title" id="panel-title">Pharmacology</span>
     <div class="panel-right">
       <span class="panel-badge" id="panel-badge">3 due</span>
-      <button class="panel-anki-btn" id="panel-anki">↗ Anki</button>
+      <span class="panel-anki-btn panel-more" id="panel-anki" aria-hidden="true">⋯</span>
     </div>
   </div>
   <div id="panel-body"></div>
@@ -1014,6 +1038,7 @@ footer {
       <a href="#brain">Safety</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
+      <a href="#support">Support</a>
     </div>
     <div class="nav-cta-slot" id="nav-cta-slot"></div>
     <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
@@ -1030,10 +1055,11 @@ footer {
   <a href="#brain">Why it's safe</a>
   <a href="#pricing">Pricing</a>
   <a href="#faq">FAQ</a>
+  <a href="#support">Support</a>
   <div class="mobile-cta" id="mobile-cta"></div>
 </div>
 
-<!-- mobile sticky CTA: only shown ≤960px; hidden by JS while the hero form is on screen -->
+<!-- mobile sticky CTA: only shown ≤960px; hidden by JS while the hero CTA is on screen -->
 <div class="mobile-sticky-cta" id="mobile-sticky-cta">
   <div id="mobile-sticky-slot"></div>
 </div>
@@ -1044,13 +1070,19 @@ footer {
   <header class="hero" id="top">
     <div class="glow" aria-hidden="true"></div>
     <div class="hero-inner">
-      <div class="try-notch rise d1"><span class="up" aria-hidden="true">↑</span> This notch is real — hover it</div>
+      <div class="try-notch rise d1"><span class="up" aria-hidden="true">↑</span> <span class="try-notch-text">This notch is real. Hover it.</span></div>
       <h1 class="rise d2">Your Anki reps<br>live in the <em>notch</em> now.</h1>
-      <p class="sub rise d3">A glanceable due count sits in your MacBook notch. Hover, flip, grade — without leaving what you're doing. FlashNotch drives your real Anki, so your schedule stays exactly as Anki computes it.</p>
+      <p class="sub rise d3">A glanceable due count sits in your MacBook notch. Hover, flip, grade, and get back to what you were doing. FlashNotch drives your real Anki, so your schedule stays exactly as Anki computes it.</p>
       <div id="hero-cta" class="rise d4"></div>
-      <p class="cta-meta rise d5">macOS 15+ · drives your real Anki · review-only · no subscription</p>
+      <p class="cta-meta rise d5">macOS 15+ · with or without a notch · one-time purchase · no subscription</p>
       <p class="cta-meta maker-line rise d5">Built by a heavy Anki user who does ~546 reps a day.</p>
     </div>
+
+    <figure class="hero-shot rise d5">
+      <img src="images/01-review.webp" width="1600" height="738" fetchpriority="high"
+           alt="The FlashNotch review panel dropping out of a MacBook notch, showing an ECG card answer with Again, Hard, Good and Easy buttons and Anki's intervals">
+      <figcaption>The real app, reviewing a real card. Anki does the scheduling.</figcaption>
+    </figure>
 
     <!-- decorative flashcard ticker -->
     <div class="ticker-wrap rise d5" aria-hidden="true">
@@ -1078,16 +1110,20 @@ footer {
       <span class="sec-kicker">How it works</span>
     </div>
     <h2 class="reveal">Hover. Flip. <em>Grade.</em></h2>
+    <figure class="shot-wide reveal">
+      <img src="images/02-pill.webp" width="1600" height="538" loading="lazy"
+           alt="The menu bar of a MacBook with the due count, 334, shown beside the notch">
+    </figure>
     <div class="how-grid">
       <div class="step reveal">
         <div class="n">1</div>
         <h3>Glance</h3>
-        <p>The pill shows today's due count — limit-adjusted, straight from Anki. A green ✓ means you're caught up.</p>
+        <p>The notch shows today's due count, straight from Anki and already limit-adjusted. A green ✓ means you're caught up.</p>
       </div>
       <div class="step reveal">
         <div class="n">2</div>
         <h3>Expand</h3>
-        <p>Hover the notch or press ⌘⌥R. The panel drops out with your real card — images, cloze, MathJax and all.</p>
+        <p>Hover the notch or press ⌥⌘R. The panel drops out with your real card: images, cloze, MathJax and all.</p>
       </div>
       <div class="step reveal">
         <div class="n">3</div>
@@ -1104,7 +1140,7 @@ footer {
       <span class="sec-kicker">Why it's safe</span>
     </div>
     <h2 class="reveal">Anki is the brain.<br>The notch is the <em>face.</em></h2>
-    <p class="lede reveal">FlashNotch reimplements zero scheduling. It drives Anki's own reviewer over AnkiConnect, so your intervals, daily limits, FSRS and review history stay exactly as Anki computes them.</p>
+    <p class="lede reveal">FlashNotch does no scheduling of its own. It drives Anki's own reviewer over AnkiConnect, so your intervals, daily limits, FSRS and review history stay exactly as Anki computes them.</p>
 
     <div class="compare reveal">
       <div class="compare-row head">
@@ -1115,28 +1151,28 @@ footer {
       <div class="compare-row">
         <div class="compare-cell label">Scheduling</div>
         <div class="compare-cell us"><span class="check">✓</span>Drives Anki's own reviewer</div>
-        <div class="compare-cell other"><span class="dash">—</span>Clones decks &amp; re-schedules</div>
+        <div class="compare-cell other"><span class="dash">×</span>Clones decks &amp; re-schedules</div>
       </div>
       <div class="compare-row">
         <div class="compare-cell label">Your data</div>
         <div class="compare-cell us"><span class="check">✓</span>No database, history never drifts</div>
-        <div class="compare-cell other"><span class="dash">—</span>Separate DB that can double-count</div>
+        <div class="compare-cell other"><span class="dash">×</span>Separate DB that can double-count</div>
       </div>
       <div class="compare-row">
         <div class="compare-cell label">Scope</div>
         <div class="compare-cell us"><span class="check">✓</span>Review-only, edits stay in Anki</div>
-        <div class="compare-cell other"><span class="dash">—</span>Varies</div>
+        <div class="compare-cell other"><span class="dash">·</span>Varies</div>
       </div>
       <div class="compare-row">
         <div class="compare-cell label">Privacy</div>
         <div class="compare-cell us"><span class="check">✓</span>100% local, nothing leaves your Mac</div>
-        <div class="compare-cell other"><span class="dash">—</span>Varies</div>
+        <div class="compare-cell other"><span class="dash">·</span>Varies</div>
       </div>
     </div>
 
     <div class="founder reveal">
-      <p>I do about 546 due cards a day. The thing that always broke my streak was the friction of opening the full Anki app for a quick review in the middle of something else. I built FlashNotch so I could knock out reps in the notch without context-switching — and without any risk of drifting from Anki's scheduler.</p>
-      <div class="sig">— the maker of FlashNotch</div>
+      <p>I do about 546 due cards a day. The thing that always broke my streak was the friction of opening the full Anki app for a quick review in the middle of something else. I built FlashNotch so I could knock out reps in the notch without switching apps, and without any risk of drifting from Anki's scheduler.</p>
+      <div class="sig">The maker of FlashNotch</div>
     </div>
   </section>
 
@@ -1148,7 +1184,7 @@ footer {
     </div>
     <h2 class="reveal">Your hands never<br>leave the <em>keys.</em></h2>
     <div class="keys reveal">
-      <div class="key"><div class="keycap">⌘⌥R</div><span>summon</span></div>
+      <div class="key"><div class="keycap">⌥⌘R</div><span>summon</span></div>
       <div class="key"><div class="keycap">Space</div><span>flip · Good</span></div>
       <div class="key"><div class="keycap">1</div><span>Again</span></div>
       <div class="key"><div class="keycap">2</div><span>Hard</span></div>
@@ -1170,77 +1206,40 @@ footer {
 
     <div class="row">
       <div class="col-text reveal">
-        <h3>Follows your Mac — Light, Dark, or System</h3>
-        <p class="lede">The panel tracks your Mac's appearance. Cards match Anki's night mode exactly. In the dark, the panel is pure black — it fuses with the notch.</p>
+        <h3>Follows your Mac: light, dark, or system</h3>
+        <p class="lede">The panel follows your Mac's appearance, or you can pick Light or Dark in Settings. Cards keep your note type's own night-mode styling, so they look the way they do in Anki. In the dark, the panel turns pure black and fuses with the notch.</p>
         <ul class="feature-bullets">
-          <li>Light / Dark / System, set in-app</li>
-          <li>Card css mirrors Anki's own night-mode classes</li>
-          <li>Pure-black panel in dark mode for notch fusion</li>
+          <li>Light, Dark or System, set in the app</li>
+          <li>Cards follow Anki's night-mode classes</li>
+          <li>Pure-black panel in dark mode, fused with the notch</li>
         </ul>
       </div>
       <div class="col-mockup reveal">
-        <div class="mock-card">
-          <div class="mini">
-            <div class="mini-light-label">Same card, light mode</div>
-            <div class="mini-light">
-              <div class="mini-light-header">
-                <span>Pharmacology</span>
-                <span>3 due</span>
-              </div>
-              <div class="mini-light-card">
-                Beta blockers reduce heart rate by blocking <span class="cloze-light">β₁-adrenergic</span> receptors
-              </div>
-              <div class="mini-light-grade">
-                <span class="again">Again</span>
-                <span>Hard</span>
-                <span>Good</span>
-                <span>Easy</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <img class="shot" src="images/05-dark-mode.webp" width="1600" height="738" loading="lazy"
+             alt="The review panel in dark mode, showing a physiology card with a MathJax formula">
       </div>
     </div>
 
     <div class="row reverse">
       <div class="col-text reveal">
         <h3>Pick a deck. Review its whole subtree.</h3>
-        <p class="lede">A glanceable picker shows your top-level decks with today's due counts — limit-adjusted, straight from Anki. Pick one and you're reviewing under Anki's daily limits, same as the desktop app.</p>
+        <p class="lede">The picker shows your deck tree with today's due counts, straight from Anki and already limit-adjusted. Pick a parent to review everything under it, or a single subdeck. You're reviewing under Anki's daily limits, same as the desktop app.</p>
         <ul class="feature-bullets">
-          <li>Top-level decks only — no double-counting parents and children</li>
-          <li>Counts are limit-adjusted, not raw backlog</li>
-          <li>Subtree review, just like Anki's deck browser</li>
+          <li>Counts respect your daily limits, not the raw backlog</li>
+          <li>Parents count their whole subtree, the way Anki does</li>
+          <li>When a deck is done, the next one with cards waiting is one click away</li>
         </ul>
       </div>
       <div class="col-mockup reveal">
-        <div class="mock-card">
-          <div class="mini">
-            <div class="mini-deck-title">Pick a deck</div>
-            <div class="mini-deck-row">
-              <span class="mini-deck-name">Pharmacology</span>
-              <span class="mini-deck-due">42</span>
-            </div>
-            <div class="mini-deck-row">
-              <span class="mini-deck-name">Internal Medicine</span>
-              <span class="mini-deck-due">318</span>
-            </div>
-            <div class="mini-deck-row">
-              <span class="mini-deck-name">Pathology</span>
-              <span class="mini-deck-due">127</span>
-            </div>
-            <div class="mini-deck-row">
-              <span class="mini-deck-name">Arabic</span>
-              <span class="mini-deck-due zero">✓</span>
-            </div>
-          </div>
-        </div>
+        <img class="shot" src="images/04-deck-picker.webp" width="1600" height="738" loading="lazy"
+             alt="The deck picker listing Pathology, Pharmacology and its subdecks, Physiology and Spanish with their due counts">
       </div>
     </div>
 
     <div class="row">
       <div class="col-text reveal">
         <h3>Quiet by design.</h3>
-        <p class="lede">No badges bouncing, no streak guilt, no notifications. One number in the notch, and a ✓ when you're done. FlashNotch never pings you — you look when you want to.</p>
+        <p class="lede">No bouncing badges, no streak guilt, no notifications. One number in the notch, and a ✓ when you're done. FlashNotch never pings you. You look when you want to.</p>
         <ul class="feature-bullets">
           <li>No push notifications, ever</li>
           <li>No streaks, no gamification pressure</li>
@@ -1253,7 +1252,7 @@ footer {
             <div class="mini-caughtup">
               <div class="check">✓</div>
               <div class="t">Caught up</div>
-              <div class="d">12 reviewed this session</div>
+              <div class="d">12 reviewed this session · 186 today</div>
               <div class="pill-caughtup">
                 <span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;"></span>
                 ✓
@@ -1261,6 +1260,21 @@ footer {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row reverse">
+      <div class="col-text reveal">
+        <h3>No notch? Use the floating bar.</h3>
+        <p class="lede">On a Mac without a notch, or on an external display, FlashNotch shows the same due count in a small floating bar. Drag it wherever you like. The panel opens right from it, and you can drag the open panel too.</p>
+        <ul class="feature-bullets">
+          <li>Automatic picks the notch or the bar for each display</li>
+          <li>Position is remembered between launches</li>
+          <li>Or pick Notch or Floating Bar yourself in Settings</li>
+        </ul>
+      </div>
+      <div class="col-mockup reveal">
+        <img class="shot" src="images/06-floating-bar.webp" width="1600" height="738" loading="lazy"
+             alt="The review panel in floating-bar mode below a menu bar with no notch, showing a Spanish vocabulary card">
       </div>
     </div>
   </section>
@@ -1276,32 +1290,32 @@ footer {
       <div class="feature">
         <div class="glyph">⌘</div>
         <h3>Real card rendering</h3>
-        <p>Images, audio, cloze, typed answers and MathJax render like they do in Anki — because it's your actual card.</p>
+        <p>Images, audio, cloze, typed answers and MathJax render the way they do in Anki, because it's your actual card.</p>
       </div>
       <div class="feature">
         <div class="glyph">◠</div>
         <h3>Hover to expand</h3>
-        <p>A 250ms dwell opens the panel; moving away closes it. Or turn it off and use the hotkey only.</p>
+        <p>A short hover opens the panel and moving away closes it. Prefer the keyboard? Turn hover off and use ⌥⌘R.</p>
       </div>
       <div class="feature">
         <div class="glyph">⤢</div>
         <h3>Zoom &amp; resize</h3>
-        <p>⌘+ / ⌘− zooms the card. Drag the corner grip to make the panel yours.</p>
+        <p>⌘+ and ⌘− zoom the card. Drag the bottom-right corner to make the panel the size you like.</p>
       </div>
       <div class="feature">
         <div class="glyph">↓↑</div>
         <h3>Scroll to review</h3>
-        <p>Prefer scrolling? Swipe down to flip, swipe down again for Good. Optional, off-capable.</p>
+        <p>Prefer the trackpad? Swipe down to flip, down again for Good, up for Again. Optional, with three sensitivity levels.</p>
       </div>
       <div class="feature">
         <div class="glyph">M·E</div>
         <h3>Mark &amp; edit in Anki</h3>
-        <p>Press M to mark a card for later, or E to jump straight to it in Anki's editor.</p>
+        <p>Press M to mark a note for later, or E to open it in Anki's editor. Sync with AnkiWeb from the ⋯ menu.</p>
       </div>
       <div class="feature">
         <div class="glyph">−·=</div>
-        <h3>Optional bury power-up</h3>
-        <p>A bundled companion add-on adds bury (− / =) using Anki's own operation. Strictly optional.</p>
+        <h3>Optional bury add-on</h3>
+        <p>A free companion add-on, included with the app, adds bury (− and =) using Anki's own operation. Strictly optional.</p>
       </div>
     </div>
   </section>
@@ -1315,9 +1329,9 @@ footer {
     <h2 class="reveal">One-time. No <em>subscription.</em></h2>
     <div class="price-card reveal">
       <div class="price"><sup>$</sup>4.99</div>
-      <div class="price-sub">One purchase, yours forever. Updates included.</div>
+      <div class="price-sub">One purchase, yours to keep. Updates included.</div>
       <div id="price-cta"></div>
-      <div class="price-note">Requires macOS 15 or later. Notch required for the pill; the ⌘⌥R hotkey works on any Mac. Anki and AnkiConnect are free.</div>
+      <div class="price-note">Requires macOS 15 or later and the free Anki app with its AnkiConnect add-on. Works on every Mac: in the notch where there is one, in a floating bar everywhere else.</div>
     </div>
   </section>
 
@@ -1337,7 +1351,7 @@ footer {
         </button>
         <div class="faq-panel">
           <div class="faq-panel-inner">
-            <div class="faq-answer">No. FlashNotch drives Anki's own GUI reviewer over AnkiConnect. The scheduler, daily limits, learning steps and FSRS run inside Anki — FlashNotch just shows the card and sends your grade.</div>
+            <div class="faq-answer">No. FlashNotch drives Anki's own reviewer over AnkiConnect. The scheduler, daily limits, learning steps and FSRS all run inside Anki. FlashNotch shows the card and sends your grade, nothing more.</div>
           </div>
         </div>
       </div>
@@ -1349,7 +1363,7 @@ footer {
         </button>
         <div class="faq-panel">
           <div class="faq-panel-inner">
-            <div class="faq-answer">Anki (free) with the AnkiConnect add-on (code: 2055492159), running in the background. FlashNotch walks you through the setup on first launch, including a guided add-on install and folder pick.</div>
+            <div class="faq-answer">Anki (free) with the AnkiConnect add-on (code 2055492159), running in the background. On first launch FlashNotch checks each step and walks you through the add-on install and a one-time folder pick for card images.</div>
           </div>
         </div>
       </div>
@@ -1361,7 +1375,7 @@ footer {
         </button>
         <div class="faq-panel">
           <div class="faq-panel-inner">
-            <div class="faq-answer">Yes — the ⌘⌥R hotkey summons the review panel on any Mac running macOS 15+. The always-visible pill is notch-only.</div>
+            <div class="faq-answer">Yes. On Macs without a notch, and on external displays, the due count lives in a small floating bar you can drag anywhere. Everything else works the same, including the ⌥⌘R shortcut.</div>
           </div>
         </div>
       </div>
@@ -1373,7 +1387,7 @@ footer {
         </button>
         <div class="faq-panel">
           <div class="faq-panel-inner">
-            <div class="faq-answer">Yes. Grant one-time read access to your Anki folder and cards render with their full media. Audio plays through Anki itself, honoring your per-deck autoplay settings.</div>
+            <div class="faq-answer">Yes. Give FlashNotch one-time read access to your Anki folder and cards render with their full media. Audio plays through Anki itself, honoring your per-deck autoplay settings. Press R to replay it.</div>
           </div>
         </div>
       </div>
@@ -1385,7 +1399,7 @@ footer {
         </button>
         <div class="faq-panel">
           <div class="faq-panel-inner">
-            <div class="faq-answer">No — by design. FlashNotch is review-only. The "↗ Anki" button jumps to the current card in the full app when you need more. Press M to mark a card for later, or E to edit it in Anki.</div>
+            <div class="faq-answer">No, by design. FlashNotch is review-only. From the ⋯ menu you can open the current card in Anki or edit its note in Anki's editor (E), and M marks a note for later.</div>
           </div>
         </div>
       </div>
@@ -1404,14 +1418,51 @@ footer {
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false">
           <span class="faq-num">07</span>
-          <span class="faq-q">When can I buy it?</span>
+          <span class="faq-q">Where do I buy it, and what does it cost?</span>
           <span class="faq-icon" aria-hidden="true"></span>
         </button>
         <div class="faq-panel">
           <div class="faq-panel-inner">
-            <div class="faq-answer">FlashNotch is coming soon to the Mac App Store as a one-time purchase. Waitlist members get a founding price — $3.99 launch week, then $4.99. No subscription, ever. Join the waitlist above and we'll email you once, the day it launches — no spam, no account required.</div>
+            <div class="faq-answer">On the Mac App Store, for a one-time $4.99. No subscription, no in-app purchases, and updates are included.</div>
           </div>
         </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-num">08</span>
+          <span class="faq-q">What if it isn't for me?</span>
+          <span class="faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-panel">
+          <div class="faq-panel-inner">
+            <div class="faq-answer">Purchases go through Apple, so refunds do too. You can request one at <a href="https://reportaproblem.apple.com" rel="noopener">reportaproblem.apple.com</a>. And if something doesn't work the way you expected, write to us first; we'd like to fix it.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SUPPORT ────────────────────────────────────────────────────────── -->
+  <section id="support">
+    <div class="sec-head reveal">
+      <span class="sec-index">08</span>
+      <span class="sec-kicker">Support</span>
+    </div>
+    <h2 class="reveal">Need a <em>hand?</em></h2>
+    <div class="support-grid reveal">
+      <div class="support-card">
+        <h3>Write to us</h3>
+        <p>Email <a class="support-mail" href="mailto:support@minutebank.app?subject=FlashNotch%20support">support@minutebank.app</a>. Tell us your macOS version, your Anki version, and what you see. A screenshot helps. We read every message.</p>
+      </div>
+      <div class="support-card">
+        <h3>Quick fixes</h3>
+        <ul class="support-list">
+          <li><strong>“Anki isn’t running”</strong> Open Anki and leave it running in the background.</li>
+          <li><strong>“One free add-on to connect”</strong> In Anki, choose Tools → Add-ons → Get Add-ons, paste 2055492159, then restart Anki.</li>
+          <li><strong>“Anki is asleep”</strong> Click Anki’s window once to wake it, then try again.</li>
+          <li><strong>Images don’t load</strong> Open Settings → Anki → Choose Folder and pick your Anki2 folder again.</li>
+          <li><strong>Nothing in the notch</strong> Use Open Review Panel in the menu bar, or press ⌥⌘R.</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -1419,9 +1470,9 @@ footer {
   <!-- ── CLOSING CTA ────────────────────────────────────────────────────── -->
   <section class="closing-cta">
     <h2 class="reveal">Ready when <em>you</em> are.</h2>
-    <p class="sub reveal">Join the waitlist for the founding price — $3.99 launch week, then $4.99 — and get emailed the day FlashNotch launches on the Mac App Store.</p>
+    <p class="sub reveal">Your reviews, one glance away. A one-time purchase on the Mac App Store, while Anki keeps doing the scheduling.</p>
     <div class="reveal" id="closing-cta"></div>
-    <p class="risk-line reveal">Free Anki &amp; AnkiConnect · one-time purchase, no subscription ever · no account ever</p>
+    <p class="risk-line reveal">Free Anki &amp; AnkiConnect · no subscription · no account · everything stays on your Mac</p>
   </section>
 
 </div><!-- .wrap -->
@@ -1432,7 +1483,7 @@ footer {
     <div class="foot-grid">
       <div class="foot-col foot-brand">
         <a class="wordmark" href="#top">Flash<em>Notch</em></a>
-        <p>A native macOS notch study companion for Anki. Review-only, no database, no drift.</p>
+        <p>A native macOS study companion for Anki. Review-only, no database, no drift.</p>
       </div>
       <div class="foot-col">
         <h4>Product</h4>
@@ -1442,9 +1493,10 @@ footer {
         <a href="#faq">FAQ</a>
       </div>
       <div class="foot-col">
-        <h4>Legal</h4>
-        <a href="privacy.html">Privacy Policy</a>
+        <h4>Help</h4>
+        <a href="#support">Support</a>
         <a href="mailto:support@minutebank.app">Contact</a>
+        <a href="privacy.html">Privacy Policy</a>
       </div>
     </div>
     <div class="foot-bottom">
@@ -1457,182 +1509,106 @@ footer {
 <!-- ── SCRIPT ─────────────────────────────────────────────────────────────── -->
 <script>
 /* ══════════════════════════════════════════════════════════════════════
-   LAUNCH CONFIG — one switch to flip at launch.
-   - live: false  → every CTA renders the email waitlist ("Email me at launch")
-   - live: true   → every CTA renders "Download on the Mac App Store" → appStoreUrl
+   LAUNCH CONFIG: one switch to flip once FlashNotch is on sale.
+   - live: false  every CTA says "Coming soon to the Mac App Store" and offers an
+                  "Email me at launch" link (a plain mailto; no form service needed)
+   - live: true   every CTA links to the App Store listing
+   The contact address also appears in the Support section, the footer and privacy.html.
    ══════════════════════════════════════════════════════════════════════ */
 const LAUNCH = {
   live: false,
-  appStoreUrl: "",
-  // Paste your Formspree endpoint here to go live: https://formspree.io/f/XXXXXXXX
-  // While this stays on the sentinel, the form gracefully falls back to a mailto.
-  // No JS change needed once a real URL is set — the fetch below already matches
-  // Formspree's AJAX contract (JSON POST + Accept: application/json + res.ok check).
-  formEndpoint: "REPLACE_WITH_FORM_URL"
+  appStoreUrl: "https://apps.apple.com/app/flashnotch/id6778994529",
+  price: "$4.99",
+  contactEmail: "support@minutebank.app"
 };
 
-/* Founding-price hook — single source of truth, reused in the waitlist meta copy. */
-const FOUNDING_HOOK = "$3.99 launch week for waitlist members — then $4.99. No subscription, ever.";
+/* Apple's official badge artwork, embedded the way Apple Marketing Tools documents it. */
+const STORE_BADGE_SRC = "https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-mac-app-store/black/en-us";
 
 /* ── CTA RENDERING ─────────────────────────────────────────────────────── */
-/* nav + mobile-menu are tight slots: a full email form would crowd them, so
-   they get a compact button that jumps to the hero form. hero/price/closing
-   carry the actual inline form. In live mode every slot becomes the same
-   App Store download button. */
+/* The nav, mobile menu and sticky bar are tight slots and get a compact button.
+   The hero, pricing and closing slots get the full call to action. */
 const COMPACT_SLOTS = ['nav-cta-slot', 'mobile-cta', 'mobile-sticky-slot'];
+const FULL_SLOTS = ['hero-cta', 'price-cta', 'closing-cta'];
 
-function renderCTAs() {
-  const slotIds = ['nav-cta-slot', 'hero-cta', 'mobile-cta', 'price-cta', 'closing-cta', 'mobile-sticky-slot'];
-
-  slotIds.forEach(function (id) {
-    const slot = document.getElementById(id);
-    if (!slot) return;
-    slot.innerHTML = '';
-    if (LAUNCH.live && LAUNCH.appStoreUrl) {
-      slot.appendChild(makeDownloadButton());
-    } else if (COMPACT_SLOTS.indexOf(id) !== -1) {
-      slot.appendChild(makeWaitlistButton());
-    } else {
-      slot.appendChild(makeWaitlist());
-    }
-  });
+function launchMailto() {
+  const subject = encodeURIComponent('Tell me when FlashNotch launches');
+  const body = encodeURIComponent('Please email me once when FlashNotch is on the Mac App Store.');
+  return 'mailto:' + LAUNCH.contactEmail + '?subject=' + subject + '&body=' + body;
 }
 
-function makeDownloadButton() {
-  const a = document.createElement('a');
-  a.className = 'btn btn-primary';
-  a.href = LAUNCH.appStoreUrl;
-  a.innerHTML = '<span class="apple">&#xF8FF;</span> Download on the Mac App Store';
-  return a;
+function makeLink(className, href, text) {
+  const link = document.createElement('a');
+  link.className = className;
+  link.href = href;
+  link.textContent = text;
+  return link;
 }
 
-/* compact CTA for nav + mobile menu: scrolls to the hero form and focuses it */
-function makeWaitlistButton() {
-  const a = document.createElement('a');
-  a.className = 'btn btn-primary';
-  a.href = '#top';
-  a.textContent = 'Get on the list';
-  a.addEventListener('click', function () {
-    const menu = document.getElementById('mobile-menu');
-    if (menu) menu.classList.remove('open');
-    const burger = document.getElementById('hamburger');
-    if (burger) burger.setAttribute('aria-expanded', 'false');
-    setTimeout(function () {
-      const input = document.querySelector('#hero-cta input[type="email"]');
-      if (input) input.focus({ preventScroll: true });
-    }, 500);
-  });
-  return a;
+function makeNote(text) {
+  const note = document.createElement('p');
+  note.className = 'cta-note';
+  note.textContent = text;
+  return note;
 }
 
-function makeWaitlist() {
+function makeCompactCTA() {
+  if (LAUNCH.live) {
+    return makeLink('btn btn-primary', LAUNCH.appStoreUrl, 'Get FlashNotch · ' + LAUNCH.price);
+  }
+  return makeLink('btn btn-primary', launchMailto(), 'Email me at launch');
+}
+
+function makeFullCTA() {
   const wrap = document.createElement('div');
-  wrap.className = 'waitlist';
+  wrap.className = 'cta';
 
-  const row = document.createElement('div');
-  row.className = 'waitlist-row';
-
-  const input = document.createElement('input');
-  input.type = 'email';
-  input.name = 'email';
-  input.placeholder = 'you@example.com';
-  input.required = true;
-  input.autocomplete = 'email';
-  input.setAttribute('inputmode', 'email');
-  input.setAttribute('aria-label', 'Email address');
-
-  const btn = document.createElement('button');
-  btn.type = 'submit';
-  btn.className = 'btn btn-primary';
-  btn.textContent = 'Email me at launch →';
-
-  row.appendChild(input);
-  row.appendChild(btn);
-
-  const msg = document.createElement('div');
-  msg.className = 'waitlist-msg';
-  msg.setAttribute('role', 'status');
-  msg.setAttribute('aria-live', 'polite');
-
-  const meta = document.createElement('div');
-  meta.className = 'waitlist-meta';
-  // FOUNDING_HOOK is a fixed app-controlled string (no user input) → safe innerHTML.
-  meta.innerHTML = FOUNDING_HOOK + '<br>One email, at launch · no spam · no account.';
-
-  wrap.appendChild(row);
-  wrap.appendChild(msg);
-  wrap.appendChild(meta);
-
-  function setMsg(text, kind) {
-    msg.textContent = text;
-    msg.className = 'waitlist-msg' + (kind ? ' ' + kind : '');
+  if (LAUNCH.live) {
+    const badge = document.createElement('a');
+    badge.className = 'store-badge';
+    badge.href = LAUNCH.appStoreUrl;
+    const image = document.createElement('img');
+    image.src = STORE_BADGE_SRC;
+    image.alt = 'Download on the Mac App Store';
+    image.width = 211;
+    image.height = 54;
+    badge.appendChild(image);
+    wrap.appendChild(badge);
+    wrap.appendChild(makeNote(LAUNCH.price + ' one-time purchase · macOS 15 or later'));
+    return wrap;
   }
 
-  /* Optional, honest share nudge shown after a successful signup (no counters). */
-  function showShareNudge() {
-    if (wrap.querySelector('.waitlist-share')) return;
-    const share = document.createElement('div');
-    share.className = 'waitlist-share';
-    const link = document.createElement('a');
-    link.href = 'mailto:?subject=' + encodeURIComponent('FlashNotch — Anki reps in your MacBook notch') +
-      '&body=' + encodeURIComponent('Thought of you — Anki reviews from the MacBook notch, drives your real Anki: https://mtdinc.github.io/flashnotch-website/');
-    link.textContent = 'Send them FlashNotch';
-    share.appendChild(document.createTextNode('Know someone drowning in their Anki queue? '));
-    share.appendChild(link);
-    wrap.appendChild(share);
-  }
-
-  async function submit(e) {
-    if (e) e.preventDefault();
-    const email = input.value.trim();
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setMsg('Please enter a valid email address.', 'error');
-      return;
-    }
-
-    if (LAUNCH.formEndpoint === 'REPLACE_WITH_FORM_URL' || !LAUNCH.formEndpoint) {
-      // Fallback: visible mailto link
-      btn.disabled = true;
-      btn.textContent = 'Open email client';
-      setMsg('Email capture is not set up yet. Email us to join the waitlist:', 'error');
-      const link = document.createElement('a');
-      link.className = 'mailto-fallback';
-      link.href = 'mailto:support@minutebank.app?subject=FlashNotch%20waitlist&body=' + encodeURIComponent('Add me to the launch list: ' + email);
-      link.textContent = 'support@minutebank.app';
-      msg.appendChild(document.createElement('br'));
-      msg.appendChild(link);
-      return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'Sending…';
-    setMsg('');
-
-    try {
-      const res = await fetch(LAUNCH.formEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ email: email, source: 'flashnotch-website' })
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      setMsg("You're on the list — we'll email you once, at launch.", 'success');
-      input.value = '';
-      btn.textContent = '✓ On the list';
-      showShareNudge();
-    } catch (err) {
-      setMsg('Something went wrong. Please try again, or email support@minutebank.app.', 'error');
-      btn.disabled = false;
-      btn.textContent = 'Email me at launch →';
-    }
-  }
-
-  btn.addEventListener('click', submit);
-  input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') { e.preventDefault(); submit(); }
-  });
-
+  const soon = document.createElement('div');
+  soon.className = 'soon-pill';
+  const dot = document.createElement('span');
+  dot.className = 'soon-dot';
+  dot.setAttribute('aria-hidden', 'true');
+  soon.appendChild(dot);
+  soon.appendChild(document.createTextNode('Coming soon to the Mac App Store'));
+  wrap.appendChild(soon);
+  wrap.appendChild(makeLink('btn btn-primary', launchMailto(), 'Email me at launch'));
+  wrap.appendChild(makeNote('One email, the day it launches · ' + LAUNCH.price + ', one-time purchase'));
   return wrap;
 }
+
+function renderCTAs() {
+  COMPACT_SLOTS.forEach(function (id) {
+    const slot = document.getElementById(id);
+    if (slot) slot.replaceChildren(makeCompactCTA());
+  });
+  FULL_SLOTS.forEach(function (id) {
+    const slot = document.getElementById(id);
+    if (slot) slot.replaceChildren(makeFullCTA());
+  });
+}
+
+/* Touch screens can't hover, so the notch hint says "tap" there. */
+(function () {
+  const hint = document.querySelector('.try-notch-text');
+  if (hint && window.matchMedia('(hover: none)').matches) {
+    hint.textContent = 'This notch is real. Tap it.';
+  }
+})();
 
 /* ── PREVENT BROWSER SCROLL RESTORATION ON RELOAD ─────────────────────── */
 if ('scrollRestoration' in history) {
@@ -1802,8 +1778,8 @@ renderCTAs();
     if (done()) {
       $body.innerHTML =
         '<div class="panel-status">' +
-          '<div class="panel-status-text">Caught up ✓</div>' +
-          '<div class="panel-status-detail">' + reviewed + ' this session</div>' +
+          '<div class="panel-status-text">Done ✓</div>' +
+          '<div class="panel-status-detail">' + reviewed + ' reviewed this session</div>' +
           '<button class="panel-reset-btn" id="reset-btn">Reset demo</button>' +
         '</div>';
       document.getElementById('reset-btn').addEventListener('click', function () {
