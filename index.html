@@ -671,23 +671,6 @@ h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; color: var(--in
   color: var(--green); font-weight: 700;
 }
 
-/* mockup shells */
-.mock-card {
-  background: var(--bg-raise);
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  box-shadow: 0 24px 70px rgba(0,0,0,0.5);
-  overflow: hidden;
-  position: relative;
-}
-.mini {
-  padding: 28px;
-  display: flex; flex-direction: column;
-  gap: 14px;
-  min-height: 300px;
-  justify-content: center;
-}
-
 /* deck picker mockup */
 .mini-deck-title {
   font-family: var(--mono); font-size: 10.5px; color: var(--ink-40);
@@ -751,31 +734,6 @@ h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; color: var(--in
   background: rgba(0,0,0,0.06);
 }
 .mini-light .mini-light-grade span.again { background: rgba(255,69,58,0.15); color: #c00; }
-
-/* caught-up mockup */
-.mini-caughtup {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 12px; padding: 36px 20px; text-align: center;
-}
-.mini-caughtup .check {
-  width: 52px; height: 52px; border-radius: 50%;
-  background: rgba(61,220,104,0.1);
-  border: 1px solid rgba(61,220,104,0.3);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--green); font-size: 24px; font-weight: 700;
-}
-.mini-caughtup .t { font-size: 17px; font-weight: 600; color: var(--ink); }
-.mini-caughtup .d { font-family: var(--mono); font-size: 12px; color: var(--ink-55); }
-.mini-caughtup .pill-caughtup {
-  margin-top: 10px;
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 14px;
-  background: #000;
-  border-radius: 0 0 11px 11px;
-  font-family: var(--mono); font-size: 11px; font-weight: 600;
-  color: var(--green);
-}
 
 /* ── FEATURE GRID ──────────────────────────────────────────────────────── */
 .features {
@@ -1239,27 +1197,16 @@ footer {
     <div class="row">
       <div class="col-text reveal">
         <h3>Quiet by design.</h3>
-        <p class="lede">No bouncing badges, no streak guilt, no notifications. One number in the notch, and a ✓ when you're done. FlashNotch never pings you. You look when you want to.</p>
+        <p class="lede">No bouncing badges, no streak guilt, no notifications. One number in the notch, and a green ✓ when a deck is done. FlashNotch never pings you. You look when you want to.</p>
         <ul class="feature-bullets">
           <li>No push notifications, ever</li>
           <li>No streaks, no gamification pressure</li>
-          <li>Just a green ✓ when the queue is clear</li>
+          <li>Just a green ✓ and today's count when a deck is done</li>
         </ul>
       </div>
       <div class="col-mockup reveal">
-        <div class="mock-card">
-          <div class="mini">
-            <div class="mini-caughtup">
-              <div class="check">✓</div>
-              <div class="t">Caught up</div>
-              <div class="d">12 reviewed this session · 186 today</div>
-              <div class="pill-caughtup">
-                <span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;"></span>
-                ✓
-              </div>
-            </div>
-          </div>
-        </div>
+        <img class="shot" src="images/07-done.webp" width="1600" height="738" loading="lazy"
+             alt="The Done screen with a green check, 3 reviewed this session and 189 today, and buttons to study Pathology or pick another deck">
       </div>
     </div>
     <div class="row reverse">
